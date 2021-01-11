@@ -40,7 +40,9 @@ public class S01_이진탐색 {
 			}
 
 			// ** mid값 계산 (소수점이하는 자동으로 절삭)
-			int mid = (start + end) / 2;
+//			int mid = (start + end) / 2;	// start+end 값이 int 최대값 초과시 overflow 나기 때문에
+			// ** 아래 code로 사전에 방지할 것
+			int mid = start + (end - start) / 2;
 
 			if (num[mid] == target) {
 				return mid;
