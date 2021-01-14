@@ -1,5 +1,4 @@
 package G01_dijkstra;
-// 수정 중
 // https://www.acmicpc.net/problem/10473
 
 import java.util.*;
@@ -35,10 +34,8 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 	static final double INF = (double) 1e9; // 최대값 > double 생성
 	static int N; // 대포 수
 	static double node[][]; // node[N+2][2] => node[시작 > 대포들 > 도착][x좌표, y좌표]
-	static boolean visited[];
-	static double D[]; // dijkstra 거리 구하기
-	static ArrayList<ArrayList<Daepo>> map1;
-	static ArrayList<Daepo>[] map;
+	static double D[]; // dijkstra 속도 가중치
+	static ArrayList<ArrayList<Daepo>> map;
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
@@ -56,7 +53,6 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 		double ey = Double.parseDouble(st.nextToken());
 
 		N = Integer.parseInt(br.readLine()); // 대포수
-		visited = new boolean[N + 2]; // 방문여부
 		node = new double[N + 2][2];
 		// 시작점과 도착점 입력하고 시작
 		node[0][0] = sx;
@@ -65,17 +61,12 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 		node[N + 1][1] = ey;
 
 		// N + 2 주의
-		map = new ArrayList[N + 2];
 		D = new double[N + 2];
-		for (int i = 0; i <= N + 1; i++) {
-			map[i] = new ArrayList<Daepo>();
-			D[i] = INF; // 거리 테이블 초기화
-		}
 
-		// 현준 입력
-		map1 = new ArrayList<ArrayList<Daepo>>();
+		map = new ArrayList<ArrayList<Daepo>>();
 		for (int i = 0; i <= N + 1; i++) {
-			map1.add(new ArrayList<Daepo>());
+			map.add(new ArrayList<Daepo>());
+			D[i] = INF; // 거리 테이블 초기화
 		}
 
 		// 대포들 좌표 입력
@@ -96,7 +87,7 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 			distance = Math.sqrt(Math.pow((sx - tx), 2) + Math.pow((sy - ty), 2));
 			only_walk = distance / 5.0;
 			// 0 = 도착점 <-> 전체 각 노드 걸어갔을 때 시간 입력
-			map[0].add(new Daepo(i, only_walk));
+			map.get(0).add(new Daepo(i, only_walk));
 		}
 
 		double min_time;
@@ -109,61 +100,27 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 				ey = node[to][1];
 
 				distance = Math.sqrt(Math.pow((sx - ex), 2) + Math.pow((sy - ey), 2));
+				
 				// 걸어갔을 때 시간 vs 대포를 이용했을 때 시간
 				only_walk = distance / 5.0;
 				use_daepo = 2.0 + Math.abs(50 - distance) / 5.0;
+				
 				// 최소시간을 min에 입력
 				min_time = Math.min(only_walk, use_daepo);
 
 				// 양방향 입력
-				map[from].add(new Daepo(to, min_time));
-				map[to].add(new Daepo(from, min_time));
-
-				map1.get(from).add(new Daepo(to, min_time));
-				map1.get(to).add(new Daepo(from, min_time));
+				map.get(from).add(new Daepo(to, min_time));
+				map.get(to).add(new Daepo(from, min_time));
 			}
 		}
 
-		dijkstra(0, map1, D);
-//		dijkstra1(0);
-
-		System.out.println(String.format("%.6f", D[N + 1]));
-
-	}
-	
-	// answer
-	private static void dijkstra1(int start) {
-		//다익스트라 실행
-		PriorityQueue<Daepo> pq = new PriorityQueue<Daepo>();
-		pq.clear();
-		pq.add(new Daepo(0, 0.0));	// 출발점을 0으로 설정했고, 이 때 거리는 0.0
-		D[0] = 0;
+		dijkstra(0, map, D);
 		
-		while(!pq.isEmpty()) {
-			Daepo curr = pq.poll();
-			
-			if(visited[curr.idx]) {
-				continue; //이미 방문했으면 건너뜀
-			}
-			
-			visited[curr.idx] = true;
-			
-			for(int i = 0; i < map[curr.idx].size(); i++) {
-				Daepo next = map[curr.idx].get(i);
-				
-				if(visited[next.idx]) {
-					continue;
-				}
-				
-				if(D[next.idx] > curr.time + next.time) {
-					D[next.idx] = curr.time + next.time;
-					pq.add(new Daepo(next.idx, D[next.idx]));
-				}
-			}
-		}		
+		System.out.println(Math.floor(D[N + 1]*1000000)/1000000);
+//		System.out.println(String.format("%.6f", D[N + 1]));
+
 	}
-	
-	// hj
+
 	private static void dijkstra(int start, ArrayList<ArrayList<Daepo>> gra, double[] d) {
 		PriorityQueue<Daepo> pq = new PriorityQueue<>();
 		pq.offer(new Daepo(start, 0.0));
@@ -186,7 +143,5 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 				}
 			}
 		}
-
 	}
-
 }
