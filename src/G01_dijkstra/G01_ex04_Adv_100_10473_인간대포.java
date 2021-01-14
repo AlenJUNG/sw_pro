@@ -53,6 +53,7 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 		double ey = Double.parseDouble(st.nextToken());
 
 		N = Integer.parseInt(br.readLine()); // 대포수
+
 		node = new double[N + 2][2];
 		// 시작점과 도착점 입력하고 시작
 		node[0][0] = sx;
@@ -69,27 +70,32 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 			D[i] = INF; // 거리 테이블 초기화
 		}
 
-		// 대포들 좌표 입력
+		// 대포들 좌표 node 입력
 		for (int i = 1; i <= N; i++) {
 			st = new StringTokenizer(br.readLine());
 			node[i][0] = Double.parseDouble(st.nextToken());
 			node[i][1] = Double.parseDouble(st.nextToken());
 		}
 
+		/************** 입력부 종료 **************/
+
 		double tx, ty; // target_x, target_y
 		double distance, only_walk, use_daepo;
 
-		// * 출발점 <-> 대포 1, 2, 3, 4, 도착점, 완전탐색하여 map에 입력
-		for (int i = 1; i <= N + 1; i++) {
-			tx = node[i][0];
-			ty = node[i][1];
+		// STEP01 : 출발점 <-> 대포 1, 2, 3, 4, 도착점, 완전탐색하여 map에 입력
+		// * 도착점에서 각 노드까지는 무조건 걸어가야만 한다.
+		for (int to = 1; to <= N + 1; to++) {
+			tx = node[to][0];
+			ty = node[to][1];
 
 			distance = Math.sqrt(Math.pow((sx - tx), 2) + Math.pow((sy - ty), 2));
 			only_walk = distance / 5.0;
 			// 0 = 도착점 <-> 전체 각 노드 걸어갔을 때 시간 입력
-			map.get(0).add(new Daepo(i, only_walk));
+			map.get(0).add(new Daepo(to, only_walk));
 		}
 
+		// STEP02 : dijkstra 돌릴 노드간 정보 확정
+		// * 출발점을 제외한 나머지 노드간 완전탐색하여 정보 확정 : only_walk vs use_daepo
 		double min_time;
 
 		for (int from = 1; from <= N + 1; from++) {
@@ -100,12 +106,12 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 				ey = node[to][1];
 
 				distance = Math.sqrt(Math.pow((sx - ex), 2) + Math.pow((sy - ey), 2));
-				
+
 				// 걸어갔을 때 시간 vs 대포를 이용했을 때 시간
 				only_walk = distance / 5.0;
 				use_daepo = 2.0 + Math.abs(50 - distance) / 5.0;
-				
-				// 최소시간을 min에 입력
+
+				// 최소시간을 min_time에 입력
 				min_time = Math.min(only_walk, use_daepo);
 
 				// 양방향 입력
@@ -114,11 +120,13 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 			}
 		}
 
+		// STEP03 : Run dijkstra
 		dijkstra(0, map, D);
-		
-		System.out.println(Math.floor(D[N + 1]*1000000)/1000000);
+
+		System.out.println(Math.floor(D[N + 1] * 1000000) / 1000000);
 //		System.out.println(String.format("%.6f", D[N + 1]));
 
+		br.close();
 	}
 
 	private static void dijkstra(int start, ArrayList<ArrayList<Daepo>> gra, double[] d) {
