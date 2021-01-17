@@ -88,16 +88,6 @@ public class G05_Kruskal {
 		System.out.println(result);
 	}
 
-	// 특정 원소가 속한 집합을 찾기
-	private static int findParent(int x) {
-		// 루트노드가 아니라면 루트노드를 찾을 때까지 재귀적으로 호출
-		if(x == parent[x]) {
-			return x;
-		}
-		parent[x] = findParent(parent[x]);
-		return parent[x]; 
-	}
-	
 	// 두 원소가 속한 집합을 합치기
 	private static void unionParent(int a, int b) {
 		a = findParent(a);
@@ -108,5 +98,15 @@ public class G05_Kruskal {
 		}else {
 			parent[a] = b;
 		}	
+	}
+	
+	// 특정 원소가 속한 집합을 찾기
+	private static int findParent(int x) {
+		// 루트노드가 아니라면 루트노드를 찾을 때까지 재귀적으로 호출
+		if(x == parent[x]) {
+			return x;
+		}
+		parent[x] = findParent(parent[x]);
+		return parent[x]; 
 	}
 }
