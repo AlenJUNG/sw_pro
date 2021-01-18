@@ -1,4 +1,6 @@
 package G07_위상정렬;
+// 방향성이 있는 비순환 그래프를 정렬하는 알고리즘
+// 선후관계, 일의 순서 or 선수과목 등 표기
 
 import java.util.*;
 import java.io.*;
