@@ -122,7 +122,7 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 
 		// STEP03 : Run dijkstra
 		dijkstra(0, map, D);
-
+		
 		System.out.println(Math.floor(D[N + 1] * 1000000) / 1000000);
 //		System.out.println(String.format("%.6f", D[N + 1]));
 
