@@ -5,13 +5,14 @@ package G07_위상정렬;
 import java.util.*;
 import java.io.*;
 
+// 선수과목을 고려한 학습 순서 결정 문제
 public class G07_위상정렬 {
 
 	// 노드의 개수(V)와 간선의 개수(E)
 	// 노드의 개수는 최대 100,000개라고 가정
 	public static int v, e;
 	// 모든 노드에 대한 진입차수는 0으로 초기화
-	public static int[] indegree = new int[100001];
+	public static int indegree[];
 	// 각 노드에 연결된 간선 정보를 담기 위한 연결 리스트 초기화
 	public static ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>();
 
@@ -23,6 +24,7 @@ public class G07_위상정렬 {
 		v = Integer.parseInt(st.nextToken());
 		e = Integer.parseInt(st.nextToken());
 
+		indegree = new int[100001];
 		// 그래프 초기화
 		for (int i = 0; i <= v; i++) {
 			graph.add(new ArrayList<Integer>());
@@ -59,11 +61,11 @@ public class G07_위상정렬 {
 			int now = q.poll();
 			result.add(now);
 			// 해당 원소와 연결된 노드들의 진입차수에서 1 빼기
-			for (int i = 0; i < graph.get(now).size(); i++) {
-				indegree[graph.get(now).get(i)] -= 1;
+			for (int toIdx = 0; toIdx < graph.get(now).size(); toIdx++) {
+				indegree[graph.get(now).get(toIdx)] -= 1;
 				// 새롭게 진입차수가 0이 되는 노드를 큐에 삽입
-				if (indegree[graph.get(now).get(i)] == 0) {
-					q.offer(graph.get(now).get(i));
+				if (indegree[graph.get(now).get(toIdx)] == 0) {
+					q.offer(graph.get(now).get(toIdx));
 				}
 			}
 		}
@@ -73,5 +75,4 @@ public class G07_위상정렬 {
 			System.out.print(result.get(i) + " ");
 		}
 	}
-
 }
