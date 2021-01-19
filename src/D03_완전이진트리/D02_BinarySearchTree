@@ -22,3 +22,57 @@ import java.io.*;
  * 노드의 추가 및 삭제에 걸리는 시간복잡도가 
  * O(logN)인 자료구조로 일반적으로 HashMap보다 느리다.
  */
+
+public class D02_BinarySearchTree {
+
+	public static void main(String[] args) throws IOException {
+
+		TreeSet<Integer> set = new TreeSet<Integer>(new Comparator<Integer>() {
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				return o1 - o2; // 내림차순 정렬
+			}
+		});
+
+		TreeMap<Integer, Integer> map = new TreeMap<Integer, Integer>(new Comparator<Integer>() {
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				return o1 - o2; // 내림차순 정렬
+			}
+		});
+
+		int keys[] = { 1, 4, 2, 5, 7, 3, 1 };
+		int values[] = { 2, 3, 1, 11, 1, 4, 1 };
+
+		for (int i = 0; i < keys.length; i++) {
+			set.add(keys[i]);
+			map.put(keys[i], values[i]);
+		}
+
+		// TreeSet에 값 1이 포함되어 있다면 값 1 삭제 > index 1이 아님
+		if (set.contains(1)) {
+			set.remove(1);
+		}
+
+		// TreeSet 모든 값 출력
+		for (int key : set) {
+			System.out.print(key + " ");
+		}
+		System.out.println();
+
+		// TreeMap에 key값 5가 포함되어 있다면 key값 5 + value 11 삭제
+		if (map.containsKey(5)) {
+			map.remove(5);
+		}
+
+		Iterator<Integer> it = map.keySet().iterator();
+		while (it.hasNext()) {
+			int key = it.next();
+			int value = map.get(key);
+
+			System.out.print("(" + key + ", " + value + ") ");
+		}
+
+	}
+
+}
