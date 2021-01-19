@@ -1,4 +1,4 @@
-package O04_ex01_특정합연속수열개수;
+package O04_투포인터와구간합;
 
 import java.util.*;
 import java.io.*;
