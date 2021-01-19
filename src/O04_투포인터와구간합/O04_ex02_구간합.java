@@ -1,12 +1,12 @@
-package O04_ex01_íŠ¹ì •í•©ì—°ì†ìˆ˜ì—´ê°œìˆ˜;
+package O04_ex01_Æ¯Á¤ÇÕ¿¬¼Ó¼ö¿­°³¼ö;
 
 import java.util.*;
 import java.io.*;
 
-// ì ‘ë‘ì‚¬ í•©(Prefix Sum) ì•Œê³ ë¦¬ì¦˜
-// ë¯¸ë¦¬ ë°°ì—´ì— ì €ì¥í•´ë†“ê³  ë‚˜ì¤‘ì— ë½‘ì•„ì“´ë‹¤. > right - (left - 1)
+// Á¢µÎ»ç ÇÕ(Prefix Sum) ¾Ë°í¸®Áò
+// ¹Ì¸® ¹è¿­¿¡ ÀúÀåÇØ³õ°í ³ªÁß¿¡ »Ì¾Æ¾´´Ù. > right - (left - 1)
 
-public class O04_ex02_êµ¬ê°„í•© {
+public class O04_ex02_±¸°£ÇÕ {
 	static int N, M;
 	static int arr[], prefixSum[];
 
@@ -17,16 +17,16 @@ public class O04_ex02_êµ¬ê°„í•© {
 		arr = new int[] { 10, 20, 30, 40, 50 };
 		prefixSum = new int[6];
 
-		// ì ‘ë‘ì‚¬ í•©(Prefix Sum) ë°°ì—´ ê³„ì‚°
+		// Á¢µÎ»ç ÇÕ(Prefix Sum) ¹è¿­ °è»ê
 		int sumValue = 0;
 
 		for (int i = 0; i < N; i++) {
 			sumValue += arr[i];
-			// ië²ˆì§¸ê¹Œì§€ì˜ êµ¬ê°„í•©ì„ prefixSum[i + 1]ì— ì €ì¥
+			// i¹øÂ°±îÁöÀÇ ±¸°£ÇÕÀ» prefixSum[i + 1]¿¡ ÀúÀå
 			prefixSum[i + 1] = sumValue;
 		}
 
-		// êµ¬ê°„í•© ê³„ì‚° (ì„¸ë²ˆì§¸ ìˆ˜ë¶€í„° ë„¤ë²ˆì§¸ ìˆ˜ê¹Œì§€)
+		// ±¸°£ÇÕ °è»ê (¼¼¹øÂ° ¼öºÎÅÍ ³×¹øÂ° ¼ö±îÁö)
 		int left = 3;
 		int right = 4;
 		System.out.println(prefixSum[right] - prefixSum[left - 1]);
