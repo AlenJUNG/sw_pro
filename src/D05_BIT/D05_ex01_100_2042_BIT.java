@@ -1,4 +1,4 @@
-package D05_ex01_100_2042_BIT;
+package D05_BIT;
 // https://www.acmicpc.net/problem/2042
 
 import java.io.*;
@@ -9,16 +9,16 @@ public class D05_ex01_100_2042_BIT {
 	static long arr[], tree[];
 
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/D05_ex01_100_2042_BIT/D05_ex01_100_2042_BIT.txt"));
+		System.setIn(new FileInputStream("src/D05_BIT/D05_ex01_100_2042_BIT.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		// ë°ì´í„°ì˜ ê°œìˆ˜(n), ë³€ê²½ íšŸìˆ˜(m), êµ¬ê°„ í•© ê³„ì‚° íšŸìˆ˜(k)
+		// µ¥ÀÌÅÍÀÇ °³¼ö(n), º¯°æ È½¼ö(m), ±¸°£ ÇÕ °è»ê È½¼ö(k)
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
 
-		// ì „ì²´ ë°ì´í„°ì˜ ê°œìˆ˜ëŠ” ìµœëŒ€ 1,000,000ê°œ
+		// ÀüÃ¼ µ¥ÀÌÅÍÀÇ °³¼ö´Â ÃÖ´ë 1,000,000°³
 		arr = new long[1000001];
 		tree = new long[1000001];
 
@@ -31,13 +31,13 @@ public class D05_ex01_100_2042_BIT {
 		for (int i = 1; i <= M + K; i++) {
 			st = new StringTokenizer(br.readLine());
 			int check = Integer.parseInt(st.nextToken());
-			// ì—…ë°ì´íŠ¸(update) ì—°ì‚°ì¸ ê²½ìš°
+			// ¾÷µ¥ÀÌÆ®(update) ¿¬»êÀÎ °æ¿ì
 			if (check == 1) {
 				int idx = Integer.parseInt(st.nextToken());
 				long value = Long.parseLong(st.nextToken());
-				update(idx, value - arr[idx]); // ë°”ë€ í¬ê¸°(dif)ë§Œí¼ ì ìš©
-				arr[idx] = value; // ië²ˆì§¸ ìˆ˜ë¥¼ valueë¡œ ì—…ë°ì´íŠ¸
-				// êµ¬ê°„ í•©(interval sum) ì—°ì‚°ì¸ ê²½ìš°
+				update(idx, value - arr[idx]); // ¹Ù²ï Å©±â(dif)¸¸Å­ Àû¿ë
+				arr[idx] = value; // i¹øÂ° ¼ö¸¦ value·Î ¾÷µ¥ÀÌÆ®
+				// ±¸°£ ÇÕ(interval sum) ¿¬»êÀÎ °æ¿ì
 			} else {
 				int start = Integer.parseInt(st.nextToken());
 				int end = Integer.parseInt(st.nextToken());
@@ -46,7 +46,7 @@ public class D05_ex01_100_2042_BIT {
 		}
 	}
 
-	// ië²ˆì§¸ ìˆ˜ë¥¼ difë§Œí¼ ë”í•˜ëŠ” í•¨ìˆ˜
+	// i¹øÂ° ¼ö¸¦ dif¸¸Å­ ´õÇÏ´Â ÇÔ¼ö
 	private static void update(int i, long dif) {
 		while (i <= N) {
 			tree[i] += dif;
@@ -54,17 +54,17 @@ public class D05_ex01_100_2042_BIT {
 		}
 	}
 
-	// startë¶€í„° endê¹Œì§€ì˜ êµ¬ê°„ í•©ì„ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
+	// startºÎÅÍ end±îÁöÀÇ ±¸°£ ÇÕÀ» °è»êÇÏ´Â ÇÔ¼ö
 	private static long intervalSum(int start, int end) {
 		return prefixSum(end) - prefixSum(start - 1);
 	}
 
-	// ië²ˆì§¸ ìˆ˜ê¹Œì§€ì˜ ëˆ„ì  í•©ì„ ê³„ì‚°í•˜ëŠ” í•¨ìˆ˜
+	// i¹øÂ° ¼ö±îÁöÀÇ ´©Àû ÇÕÀ» °è»êÇÏ´Â ÇÔ¼ö
 	private static long prefixSum(int i) {
 		long result = 0;
 		while (i > 0) {
 			result += tree[i];
-			// 0ì´ ì•„ë‹Œ ë§ˆì§€ë§‰ ë¹„íŠ¸ë§Œí¼ ë¹¼ê°€ë©´ì„œ ì´ë™
+			// 0ÀÌ ¾Æ´Ñ ¸¶Áö¸· ºñÆ®¸¸Å­ »©°¡¸é¼­ ÀÌµ¿
 			i -= (i & -i);
 		}
 		return result;

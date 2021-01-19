@@ -3,14 +3,14 @@ package O00_Iterator;
 import java.io.*;
 import java.util.*;
 
-/* Iterator : ëª¨ë“  ì»¬ë ‰ì…˜í´ë˜ìŠ¤ì—ì„œ ë°ì´í„°ë¥¼ ì½ì„ ë•Œ ì‚¬ìš©
- *  ë¦¬ìŠ¤íŠ¸ì˜ ê°’ì„ ë°›ì•„ ìˆœì°¨ì ìœ¼ë¡œ ê°’ì„ ì¶œë ¥
- * 	ë§Œì•½, í‘œì¤€í™”ê°€ ì•ˆë˜ë©´ ëª¨ë“  ì»¬ë ‰ì…˜í´ë˜ìŠ¤ì—ì„œ ë°ì´í„°ë¥¼ ì½ëŠ” ë©”ì„œë“œë¥¼ ì¼ì¼ì´ ì•Œì•„ì•¼í•˜ê³ 
- * 	ê°ê° ì»¬ë ‰ì…˜ì— ì ‘ê·¼ì´ í˜ë“¤ì–´ì§
+/* Iterator : ¸ğµç ÄÃ·º¼ÇÅ¬·¡½º¿¡¼­ µ¥ÀÌÅÍ¸¦ ÀĞÀ» ¶§ »ç¿ë
+ *  ¸®½ºÆ®ÀÇ °ªÀ» ¹Ş¾Æ ¼øÂ÷ÀûÀ¸·Î °ªÀ» Ãâ·Â
+ * 	¸¸¾à, Ç¥ÁØÈ­°¡ ¾ÈµÇ¸é ¸ğµç ÄÃ·º¼ÇÅ¬·¡½º¿¡¼­ µ¥ÀÌÅÍ¸¦ ÀĞ´Â ¸Ş¼­µå¸¦ ÀÏÀÏÀÌ ¾Ë¾Æ¾ßÇÏ°í
+ * 	°¢°¢ ÄÃ·º¼Ç¿¡ Á¢±ÙÀÌ Èûµé¾îÁü
  * 
- * 	1. hasNext : ë‹¤ìŒ ë°ì´í„°ê°€ ìˆëŠ”ì§€ boolean (true/false)ë¡œ ë°˜í™˜
- * 	2. next : ë‹¤ìŒ ìš”ì†Œë¥¼ ë‚˜íƒ€ëƒ„
- *  3. remove : next ë©”ì„œë“œê°€ í˜¸ì¶œí•œ ë°ì´í„°ë¥¼ ì‚­ì œ
+ * 	1. hasNext : ´ÙÀ½ µ¥ÀÌÅÍ°¡ ÀÖ´ÂÁö boolean (true/false)·Î ¹İÈ¯
+ * 	2. next : ´ÙÀ½ ¿ä¼Ò¸¦ ³ªÅ¸³¿
+ *  3. remove : next ¸Ş¼­µå°¡ È£ÃâÇÑ µ¥ÀÌÅÍ¸¦ »èÁ¦
  */
 
 public class O00_Iterator {
@@ -28,37 +28,37 @@ public class O00_Iterator {
 		}
 
 		public void showInfo() {
-			System.out.println("ì´ë¦„ : " + name);
-			System.out.println("ë‚˜ì´ : " + age);
+			System.out.println("ÀÌ¸§ : " + name);
+			System.out.println("³ªÀÌ : " + age);
 		}
 	}
 
 	public static void main(String[] args) {
 		LinkedList<PhoneInfo> ll = new LinkedList<>();
-		ll.add(new PhoneInfo("í™ê¸¸ë™", 20));
-		ll.add(new PhoneInfo("ê¹€ì†Œì›”", 22));
-		ll.add(new PhoneInfo("ë‚˜íƒœì£¼", 30));
+		ll.add(new PhoneInfo("È«±æµ¿", 20));
+		ll.add(new PhoneInfo("±è¼Ò¿ù", 22));
+		ll.add(new PhoneInfo("³ªÅÂÁÖ", 30));
 
 		Iterator<PhoneInfo> it = ll.iterator();
 		PhoneInfo info = null;
 
-		System.out.println("Iterator ë°˜ë³µìë¥¼ ì´ìš©í•˜ì—¬ ì¶œë ¥ê³¼ ë™ì‹œì— ì‚­ì œ");
+		System.out.println("Iterator ¹İº¹ÀÚ¸¦ ÀÌ¿ëÇÏ¿© Ãâ·Â°ú µ¿½Ã¿¡ »èÁ¦");
 		while (it.hasNext()) {
 			info = it.next();
 			info.showInfo();
-			if ("í™ê¸¸ë™".compareTo((info.getName())) == 0) {
+			if ("È«±æµ¿".compareTo((info.getName())) == 0) {
 				it.remove();
 			}
 		}
 
-		System.out.println("\n<ì‚­ì œ í›„ ì¶œë ¥>");
+		System.out.println("\n<»èÁ¦ ÈÄ Ãâ·Â>");
 		it = ll.iterator();
 		while (it.hasNext()) {
 			info = it.next();
 			info.showInfo();
 		}
 
-		System.out.println("\n<phoneInfo ì²« ì¸ì name ë‚´ë¦¼ì°¨ìˆœ ì¶œë ¥>");
+		System.out.println("\n<phoneInfo Ã¹ ÀÎÀÚ name ³»¸²Â÷¼ø Ãâ·Â>");
 		it = ll.descendingIterator();
 		while (it.hasNext()) {
 			info = it.next();
