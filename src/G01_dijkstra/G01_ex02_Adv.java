@@ -104,7 +104,7 @@ public class G01_ex02_Adv {
 				// 현재 노드를 거쳐서, 다른 노드로 이동하는 거리가 더 짧은 경우
 				if (temp < d[gra.get(now_idx).get(toIdx).getIdx()]) {
 					d[gra.get(now_idx).get(toIdx).getIdx()] = temp;
-					pq.offer(new Node(gra.get(now_idx).get(toIdx).getIdx(), gra.get(now_idx).get(toIdx).getDistance()));
+					pq.offer(new Node(gra.get(now_idx).get(toIdx).getIdx(), temp));
 				}
 			}
 		}
