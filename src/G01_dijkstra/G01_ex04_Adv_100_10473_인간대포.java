@@ -147,7 +147,7 @@ public class G01_ex04_Adv_100_10473_인간대포 {
 				double temp = d[now_idx] + gra.get(now_idx).get(toIdx).getTime();
 				if (d[gra.get(now_idx).get(toIdx).getIdx()] > temp) {
 					d[gra.get(now_idx).get(toIdx).getIdx()] = temp;
-					pq.offer(new Daepo(gra.get(now_idx).get(toIdx).getIdx(), gra.get(now_idx).get(toIdx).getTime()));
+					pq.offer(new Daepo(gra.get(now_idx).get(toIdx).getIdx(), temp));
 				}
 			}
 		}
