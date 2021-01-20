@@ -100,7 +100,7 @@ public class G01_ex03_Adv_100_1238_ÆÄÆ¼ {
 
 				if (value < dis[graph.get(now).get(toIdx).getIdx()]) {
 					dis[graph.get(now).get(toIdx).getIdx()] = value;
-					pq.offer(new Node(graph.get(now).get(toIdx).getIdx(), graph.get(now).get(toIdx).getDistance()));
+					pq.offer(new Node(graph.get(now).get(toIdx).getIdx(), value));
 				}
 			}
 		}
