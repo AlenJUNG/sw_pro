@@ -123,7 +123,7 @@ public class G01_ex07_Adv_P0076_효율적인도로건설_중상 {
 				break;
 				// 현재 Cost 값보다 크다면 갱신 안함
 			}
-			if (curr.cost > costArr[curr.v]) {
+			if (costArr[curr.v] < curr.cost) {
 				continue;
 			}
 			// 자신을 기준으로 탐색할 수 있는 자식들을 체크
