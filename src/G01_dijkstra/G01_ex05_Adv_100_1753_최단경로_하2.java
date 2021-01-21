@@ -3,7 +3,7 @@ package G01_dijkstra;
 import java.io.*;
 import java.util.*;
 
-public class G01_ex05_Adv_100_1753_ìµœë‹¨ê²½ë¡œ_í•˜2 {
+public class G01_ex05_Adv_100_1753_ÃÖ´Ü°æ·Î_ÇÏ2 {
 	static class Node implements Comparable<Node> {
 		int idx, dis;
 
@@ -35,7 +35,7 @@ public class G01_ex05_Adv_100_1753_ìµœë‹¨ê²½ë¡œ_í•˜2 {
 	static ArrayList<ArrayList<Node>> graph = new ArrayList<ArrayList<Node>>();
 	
 	public static void main(String[] args) throws IOException{
-		System.setIn(new FileInputStream("src/G01_dijkstra/G01_ex05_Adv_100_1753_ìµœë‹¨ê²½ë¡œ_í•˜.txt"));
+		System.setIn(new FileInputStream("src/G01_dijkstra/G01_ex05_Adv_100_1753_ÃÖ´Ü°æ·Î_ÇÏ.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -47,7 +47,7 @@ public class G01_ex05_Adv_100_1753_ìµœë‹¨ê²½ë¡œ_í•˜2 {
 		D = new int[V + 1];
 		Arrays.fill(D, INF);
 		
-		// ë°°ì—´ ë¦¬ìŠ¤íŠ¸ ì„ ì–¸ ê³¼ì • ì˜ ìˆ™ì§€í•˜ê¸°
+		// ¹è¿­ ¸®½ºÆ® ¼±¾ğ °úÁ¤ Àß ¼÷ÁöÇÏ±â
 		for (int i = 0; i <= V; i++) {
 			graph.add(new ArrayList<Node>());
 		}
@@ -87,17 +87,17 @@ public class G01_ex05_Adv_100_1753_ìµœë‹¨ê²½ë¡œ_í•˜2 {
 		while (!pq.isEmpty()) {
 			Node now = pq.poll();
 			
-			if (check[now.idx]){	// ë°©ë¬¸í–ˆë˜ ë…¸ë“œë©´ continue
+			if (check[now.idx]){	// ¹æ¹®Çß´ø ³ëµå¸é continue
 				continue;
 			}
-			check[now.idx] = true;	// ë¯¸ë°©ë¬¸ ë…¸ë“œë©´ ê·¸ë¦¬ë”” íƒìƒ‰í•  ê±°ê¸° ë•Œë¬¸ì— true ì²˜ë¦¬
+			check[now.idx] = true;	// ¹Ì¹æ¹® ³ëµå¸é ±×¸®µğ Å½»öÇÒ °Å±â ¶§¹®¿¡ true Ã³¸®
 
 //			if (d[now_idx] < now_dis) {
 //				continue;
 //			}
 			
-			// now <> next ë¡œ ì´í•´í•˜ì
-			for(Node next : gra.get(now.idx)){		// ì¸ì ‘ ë…¸ë“œ ì •ë³´ ì „ì²´ íƒìƒ‰ Node next : gra[now.idx]
+			// now <> next ·Î ÀÌÇØÇÏÀÚ
+			for(Node next : gra.get(now.idx)){		// ÀÎÁ¢ ³ëµå Á¤º¸ ÀüÃ¼ Å½»ö Node next : gra[now.idx]
 				if (d[next.idx] > now.dis + next.dis){	// 
 					d[next.idx] = now.dis + next.dis;
 					pq.offer(new Node(next.idx, d[next.idx]));

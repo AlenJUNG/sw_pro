@@ -3,11 +3,11 @@ package G01_dijkstra;
 import java.io.*;
 import java.util.*;
 
-public class G01_ex06_Adv_ì‚¬ì „A0030_ê¸°ì§€êµ­ì ê²€_ì¤‘ {
+public class G01_ex06_Adv_»çÀüA0030_±âÁö±¹Á¡°Ë_Áß {
 	static class Edge implements Comparable<Edge> {
 		int start;
 		int end;
-		long cost; // costëŠ” longì„ì„ ì£¼ì˜í•  ê²ƒ
+		long cost; // cost´Â longÀÓÀ» ÁÖÀÇÇÒ °Í
 
 		public Edge(int start, int end, long cost) {
 			this.start = start;
@@ -32,7 +32,7 @@ public class G01_ex06_Adv_ì‚¬ì „A0030_ê¸°ì§€êµ­ì ê²€_ì¤‘ {
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/G01_dijkstra/G01_ex06_Adv_ì‚¬ì „A0030_ê¸°ì§€êµ­ì ê²€_ì¤‘.txt"));
+		System.setIn(new FileInputStream("src/G01_dijkstra/G01_ex06_Adv_»çÀüA0030_±âÁö±¹Á¡°Ë_Áß.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		int TC = Integer.parseInt(br.readLine());
@@ -40,15 +40,15 @@ public class G01_ex06_Adv_ì‚¬ì „A0030_ê¸°ì§€êµ­ì ê²€_ì¤‘ {
 
 		for (int tc = 1; tc <= TC; tc++) {
 			st = new StringTokenizer(br.readLine());
-			N = Integer.parseInt(st.nextToken()); // ë…¸ë“œ ìˆ˜ (N)
-			E = Integer.parseInt(st.nextToken()); // ê°„ì„  ìˆ˜ (E)
-			C = Integer.parseInt(st.nextToken()); // ê¸°ìˆ ì„¼í„°ì˜ ìˆ˜ (C)
-			K = Integer.parseInt(st.nextToken()); // ê¸°ìˆ ì„¼í„° + ê¸°ì§€êµ­ ìˆ˜ (K)
-			M = Integer.parseInt(st.nextToken()); // ê¸°ìˆ ì„¼í„°ë³„ ê¸°ìˆ ì ìˆ˜ (M)
+			N = Integer.parseInt(st.nextToken()); // ³ëµå ¼ö (N)
+			E = Integer.parseInt(st.nextToken()); // °£¼± ¼ö (E)
+			C = Integer.parseInt(st.nextToken()); // ±â¼ú¼¾ÅÍÀÇ ¼ö (C)
+			K = Integer.parseInt(st.nextToken()); // ±â¼ú¼¾ÅÍ + ±âÁö±¹ ¼ö (K)
+			M = Integer.parseInt(st.nextToken()); // ±â¼ú¼¾ÅÍº° ±â¼úÀÚ ¼ö (M)
 
 			path = new ArrayList[N + 1];
 			D1 = new long[N + 1];
-			center1 = new int[N + 1];	// ì²« ë²ˆì§¸ ì„¼í„° ê°œìˆ˜ ë°°ì—´
+			center1 = new int[N + 1];	// Ã¹ ¹øÂ° ¼¾ÅÍ °³¼ö ¹è¿­
 
 			for (int i = 0; i <= N; i++) {
 				path[i] = new ArrayList<Edge>();
@@ -62,40 +62,40 @@ public class G01_ex06_Adv_ì‚¬ì „A0030_ê¸°ì§€êµ­ì ê²€_ì¤‘ {
 				y = Integer.parseInt(st.nextToken());
 				c = Integer.parseInt(st.nextToken());
 				
-				// ì–‘ë°©í–¥ ê·¸ë˜í”„ ê°„ì„  ì—°ê²°
+				// ¾ç¹æÇâ ±×·¡ÇÁ °£¼± ¿¬°á
 				path[x].add(new Edge(x, y, c));
 				path[y].add(new Edge(y, x, c));
 			}
 
-			dijkstra(-1, D1, center1); // 1ë²ˆì§¸ ë‹¤ìµìŠ¤íŠ¸ë¼
+			dijkstra(-1, D1, center1); // 1¹øÂ° ´ÙÀÍ½ºÆ®¶ó
 
 			int cntCenter[] = new int[C + 1];
 			int max = 0;
 			int maxCenter = 0;
 			long ans = 0;
 
-			for (int i = C + 1; i <= K; i++) { // ê¸°ì§€êµ­ë³„ ê¸°ìˆ ì ìˆ˜ ì²´í¬
+			for (int i = C + 1; i <= K; i++) { // ±âÁö±¹º° ±â¼úÀÚ ¼ö Ã¼Å©
 				cntCenter[center1[i]]++;
 				ans += D1[i];
 				if (max < cntCenter[center1[i]]) {
 					max = cntCenter[center1[i]];
-					maxCenter = center1[i]; // ì´ˆê³¼ ì—”ì§€ë‹ˆì–´ ì„¼í„° ì°¾ê¸°
+					maxCenter = center1[i]; // ÃÊ°ú ¿£Áö´Ï¾î ¼¾ÅÍ Ã£±â
 				}
 			}
 
-			if (max > 0) { // ìµœëŒ€ ì—”ì§€ë‹ˆì–´ ìˆ˜ë¥¼ ë„˜ê¸´ ê²½ìš°
+			if (max > 0) { // ÃÖ´ë ¿£Áö´Ï¾î ¼ö¸¦ ³Ñ±ä °æ¿ì
 				D2 = new long[N + 1];
 				center2 = new int[N + 1];
 				Arrays.fill(D2, INF);
-				// ë‘ë²ˆ ì§¸ ë‹¤ìµìŠ¤íŠ¸ë¼ (ì´ˆê³¼ ì—”ì§€ë‹ˆì–´ ì„¼í„° ë¹¼ê³ )
+				// µÎ¹ø Â° ´ÙÀÍ½ºÆ®¶ó (ÃÊ°ú ¿£Áö´Ï¾î ¼¾ÅÍ »©°í)
 				dijkstra(maxCenter, D2, center2);
 
-				// ë¹„êµ
+				// ºñ±³
 				long diff[] = new long[cntCenter[maxCenter]];
 				int cnt = 0;
 				for (int i = C + 1; i <= K; i++) {
 					if (center1[i] == maxCenter) {
-						// ì²« ìµœì†Œê°’ê³¼ ë‘ ë²ˆì§¸ ìµœì†Œê°’ ì°¨ì´ê³„ì‚°
+						// Ã¹ ÃÖ¼Ò°ª°ú µÎ ¹øÂ° ÃÖ¼Ò°ª Â÷ÀÌ°è»ê
 						diff[cnt++] = Math.abs(D2[i] - D1[i]);
 					}
 				}
@@ -103,7 +103,7 @@ public class G01_ex06_Adv_ì‚¬ì „A0030_ê¸°ì§€êµ­ì ê²€_ì¤‘ {
 				Arrays.sort(diff);
 				long mi = 0;
 				for (int i = 0; i < max - M; i++) {
-					mi += diff[i]; // ì°¨ì´ë§Œí¼ ë”í•¨
+					mi += diff[i]; // Â÷ÀÌ¸¸Å­ ´õÇÔ
 				}
 				ans += mi;
 			}
@@ -115,8 +115,8 @@ public class G01_ex06_Adv_ì‚¬ì „A0030_ê¸°ì§€êµ­ì ê²€_ì¤‘ {
 		PriorityQueue<Edge> pq = new PriorityQueue<>();
 		boolean check[] = new boolean[N + 1];
 		
-		for (int i = 1; i <= C; i++) {	// i ê¸°ìˆ ì„¼í„° ë…¸ë“œ
-			if (i != k) {	// ê¸°ìˆ ì„¼í„° ë…¸ë“œê°€ 
+		for (int i = 1; i <= C; i++) {	// i ±â¼ú¼¾ÅÍ ³ëµå
+			if (i != k) {	// ±â¼ú¼¾ÅÍ ³ëµå°¡ 
 				pq.add(new Edge(0, i, 0));
 				d[i] = 0;
 			}

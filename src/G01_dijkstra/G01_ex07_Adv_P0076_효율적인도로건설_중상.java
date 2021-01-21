@@ -3,11 +3,11 @@ package G01_dijkstra;
 import java.io.*;
 import java.util.*;
 
-/* ìµœëŒ€ 40ê°œì˜ test case ì…ë ¥ì‹œ java 2ì´ˆ
- * 0.05ì´ˆ 50ms 500ë§Œ í¬ê¸°
+/* ÃÖ´ë 40°³ÀÇ test case ÀÔ·Â½Ã java 2ÃÊ
+ * 0.05ÃÊ 50ms 500¸¸ Å©±â
  */
 
-public class G01_ex07_Adv_P0076_íš¨ìœ¨ì ì¸ë„ë¡œê±´ì„¤_ì¤‘ìƒ {
+public class G01_ex07_Adv_P0076_È¿À²ÀûÀÎµµ·Î°Ç¼³_Áß»ó {
 	static class Node implements Comparable<Node> {
 		int v, cost;
 
@@ -25,17 +25,17 @@ public class G01_ex07_Adv_P0076_íš¨ìœ¨ì ì¸ë„ë¡œê±´ì„¤_ì¤‘ìƒ {
 		}
 	}
 
-	// 10ì–µ + 1 > ìµœëŒ€ê°„ì„ ìˆ˜ (10ë§Œ) * ìµœëŒ€ ê°„ì„ ê°€ì¤‘ì¹˜(1ë§Œ)ìœ¼ë¡œ í‘œí˜„ ê°€ëŠ¥ìˆ˜ë³´ë‹¤ í° ê°’
+	// 10¾ï + 1 > ÃÖ´ë°£¼±¼ö (10¸¸) * ÃÖ´ë °£¼±°¡ÁßÄ¡(1¸¸)À¸·Î Ç¥Çö °¡´É¼öº¸´Ù Å« °ª
 	static final int MAX = 1000000001;
 	static int T, N, M;
-	static int cost_s[] = new int[50001]; // ìµœëŒ€ ë…¸ë“œì˜ ìˆ˜ : ì‹œì‘ S
-	static int cost_e[] = new int[50001]; // ìµœëŒ€ ë…¸ë“œì˜ ìˆ˜ : ë E
+	static int cost_s[] = new int[50001]; // ÃÖ´ë ³ëµåÀÇ ¼ö : ½ÃÀÛ S
+	static int cost_e[] = new int[50001]; // ÃÖ´ë ³ëµåÀÇ ¼ö : ³¡ E
 	static ArrayList<Node>[] graph;
 	static int answer;
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/G01_dijkstra/G01_ex07_Adv_P0076_íš¨ìœ¨ì ì¸ë„ë¡œê±´ì„¤_ì¤‘ìƒ.txt"));
+		System.setIn(new FileInputStream("src/G01_dijkstra/G01_ex07_Adv_P0076_È¿À²ÀûÀÎµµ·Î°Ç¼³_Áß»ó.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
@@ -43,10 +43,10 @@ public class G01_ex07_Adv_P0076_íš¨ìœ¨ì ì¸ë„ë¡œê±´ì„¤_ì¤‘ìƒ {
 		T = Integer.parseInt(br.readLine());
 		for (int t = 1; t <= T; t++) {
 
-			Arrays.fill(cost_s, MAX); // ìˆœë°©í–¥ ë°°ì—´ së¥¼ Max (ë¬´í•œëŒ€) ê°’ìœ¼ë¡œ ì±„ì›€
-			Arrays.fill(cost_e, MAX); // ì—­ë°©í–¥ ë°°ì—´ eë¥¼ Max (ë¬´í•œëŒ€) ê°’ìœ¼ë¡œ ì±„ì›€
+			Arrays.fill(cost_s, MAX); // ¼ø¹æÇâ ¹è¿­ s¸¦ Max (¹«ÇÑ´ë) °ªÀ¸·Î Ã¤¿ò
+			Arrays.fill(cost_e, MAX); // ¿ª¹æÇâ ¹è¿­ e¸¦ Max (¹«ÇÑ´ë) °ªÀ¸·Î Ã¤¿ò
 
-			answer = 0; // ê²°ê³¼ ëˆ„ì  ì´ˆê¸°í™”
+			answer = 0; // °á°ú ´©Àû ÃÊ±âÈ­
 
 			st = new StringTokenizer(br.readLine());
 			N = Integer.parseInt(st.nextToken());
@@ -56,7 +56,7 @@ public class G01_ex07_Adv_P0076_íš¨ìœ¨ì ì¸ë„ë¡œê±´ì„¤_ì¤‘ìƒ {
 			for (int i = 1; i < N + 1; i++) {
 				graph[i] = new ArrayList<Node>();
 			}
-			// ì…ë ¥ê°’ì„ ë°©í–¥ì„±ì´ ì—†ê¸° ë•Œë¬¸ì— ì–‘ë°©í–¥ ê°„ì„  ê°€ì¶©ì¹˜ë¡œ ì €ì¥
+			// ÀÔ·Â°ªÀ» ¹æÇâ¼ºÀÌ ¾ø±â ¶§¹®¿¡ ¾ç¹æÇâ °£¼± °¡ÃæÄ¡·Î ÀúÀå
 			for (int i = 1; i < M + 1; i++) {
 				st = new StringTokenizer(br.readLine());
 				int a = Integer.parseInt(st.nextToken());
@@ -67,24 +67,24 @@ public class G01_ex07_Adv_P0076_íš¨ìœ¨ì ì¸ë„ë¡œê±´ì„¤_ì¤‘ìƒ {
 				graph[b].add(new Node(a, c));
 			}
 
-			// find í•¨ìˆ˜ë¡œ ì •/ì—­ë°©í–¥ìœ¼ë¡œ ë‹¤ìµìŠ¤íŠ¸ë¼ ìˆ˜í–‰
+			// find ÇÔ¼ö·Î Á¤/¿ª¹æÇâÀ¸·Î ´ÙÀÍ½ºÆ®¶ó ¼öÇà
 			find(1, N, cost_s);
 			find(N, 1, cost_e);
 
-			// ì •ë°©í–¥ìœ¼ë¡œ ì‚°ì¶œëœ ìµœì í™” ê°’ì„ Maxë¡œ ì§€ì •
+			// Á¤¹æÇâÀ¸·Î »êÃâµÈ ÃÖÀûÈ­ °ªÀ» Max·Î ÁöÁ¤
 			int max = cost_s[N];
 
-			// ê¸°ë³¸ ì •ë ¬ ì˜¤ë¦„ì°¨ìˆœ ì‘ì€ê°’ë¶€í„° ì •ë ¬ì€ ê²°êµ­ ëì—ì„œë¶€í„°ì˜ ê°’ì´ë‹¤?
+			// ±âº» Á¤·Ä ¿À¸§Â÷¼ø ÀÛÀº°ªºÎÅÍ Á¤·ÄÀº °á±¹ ³¡¿¡¼­ºÎÅÍÀÇ °ªÀÌ´Ù?
 			Arrays.sort(cost_e);
 			for (int i = 2; i < N; i++) {
-				// ë(ëˆ„ì ì¹˜) - (í˜„ì¬ ê¸°ì¤€ ëˆ„ì ì¹˜ + ì‹ ê·œê°„ì„ (1)) = ì°¨ì´ë¥¼ ë§Œì¡±í•˜ëŠ” ê°„ì„  ê°€ì¤‘ì¹˜ ê°’?
+				// ³¡(´©ÀûÄ¡) - (ÇöÀç ±âÁØ ´©ÀûÄ¡ + ½Å±Ô°£¼±(1)) = Â÷ÀÌ¸¦ ¸¸Á·ÇÏ´Â °£¼± °¡ÁßÄ¡ °ª?
 				int target = max - (cost_s[i] + 1);
 				int start = 1;
-				int end = N - 2; // ëì€ Nê³¼ 2ê°œ ê±°ë¦¬ë¡œ ë–¨ì–´ì§„ ë…€ì„
+				int end = N - 2; // ³¡Àº N°ú 2°³ °Å¸®·Î ¶³¾îÁø ³à¼®
 				int mid = 0;
 
-				// íŒŒë¼ë©”íŠ¸ë¦­ ì„œì¹˜
-				while (start < end) { // ì—­ì „ë˜ì§€ ì•Šì„ ë•Œê¹Œì§€ íƒìƒ‰
+				// ÆÄ¶ó¸ŞÆ®¸¯ ¼­Ä¡
+				while (start < end) { // ¿ªÀüµÇÁö ¾ÊÀ» ¶§±îÁö Å½»ö
 					mid = (start + end) / 2;
 					if (cost_e[mid] >= target) {
 						end = mid;
@@ -93,7 +93,7 @@ public class G01_ex07_Adv_P0076_íš¨ìœ¨ì ì¸ë„ë¡œê±´ì„¤_ì¤‘ìƒ {
 					}
 				}
 
-				// íŒŒë¼ë©”íŠ¸ë¦­ ì„œì¹˜ë¡œ ìœ„ì˜ ê°’ì— ì¶©ì¡±í•˜ëŠ” ëˆ„ì ëœ ë…¸ë“œ ê°’ì´ ë‚˜ì˜´
+				// ÆÄ¶ó¸ŞÆ®¸¯ ¼­Ä¡·Î À§ÀÇ °ª¿¡ ÃæÁ·ÇÏ´Â ´©ÀûµÈ ³ëµå °ªÀÌ ³ª¿È
 				if (cost_e[mid] >= target) {
 					mid--;
 				}
@@ -108,27 +108,27 @@ public class G01_ex07_Adv_P0076_íš¨ìœ¨ì ì¸ë„ë¡œê±´ì„¤_ì¤‘ìƒ {
 		bw.close();
 	}
 
-	// find í•¨ìˆ˜ - ë‹¤ìµìŠ¤íŠ¸ë¼ ìˆ˜í–‰
+	// find ÇÔ¼ö - ´ÙÀÍ½ºÆ®¶ó ¼öÇà
 	private static void find(int start, int end, int costArr[]) {
 		costArr[start] = 0;
 		PriorityQueue<Node> pq = new PriorityQueue<Node>();
 
-		// ì´ˆê¸°ê°’ ì„¤ì •
+		// ÃÊ±â°ª ¼³Á¤
 		pq.offer(new Node(start, 0));
 
 		while (!pq.isEmpty()) {
 			Node curr = pq.poll();
-			// ìµœì¢… ìˆœíšŒê¹Œì§€ ì—…ë°ì´íŠ¸ ë˜ì—ˆë‹¤ë©´ ì¤‘ë‹¨
+			// ÃÖÁ¾ ¼øÈ¸±îÁö ¾÷µ¥ÀÌÆ® µÇ¾ú´Ù¸é Áß´Ü
 			if (curr.v == end) {
 				break;
-				// í˜„ì¬ Cost ê°’ë³´ë‹¤ í¬ë‹¤ë©´ ê°±ì‹  ì•ˆí•¨
+				// ÇöÀç Cost °ªº¸´Ù Å©´Ù¸é °»½Å ¾ÈÇÔ
 			}
 			if (curr.cost > costArr[curr.v]) {
 				continue;
 			}
-			// ìì‹ ì„ ê¸°ì¤€ìœ¼ë¡œ íƒìƒ‰í•  ìˆ˜ ìˆëŠ” ìì‹ë“¤ì„ ì²´í¬
+			// ÀÚ½ÅÀ» ±âÁØÀ¸·Î Å½»öÇÒ ¼ö ÀÖ´Â ÀÚ½ÄµéÀ» Ã¼Å©
 			for (Node child : graph[curr.v]) {
-				// í˜„ì¬ ê°’ë³´ë‹¤ ê°’ì´ ì‘ë‹¤ë©´ ê°±ì‹ í•˜ê³  Queueì— ë„£ì–´ ì‹¤í–‰
+				// ÇöÀç °ªº¸´Ù °ªÀÌ ÀÛ´Ù¸é °»½ÅÇÏ°í Queue¿¡ ³Ö¾î ½ÇÇà
 				if (costArr[child.v] > curr.cost + child.cost) {
 					costArr[child.v] = curr.cost + child.cost;
 					pq.offer(new Node(child.v, costArr[child.v]));
