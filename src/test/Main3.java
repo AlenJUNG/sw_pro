@@ -1,9 +1,9 @@
-package G01_dijkstra;
+package test;
 
 import java.io.*;
 import java.util.*;
 
-public class G01_ex06_Adv_사전A0030_기지국점검_중 {
+public class Main3 {
 	static class Node implements Comparable<Node> {
 		int start;
 		int end;
@@ -33,7 +33,7 @@ public class G01_ex06_Adv_사전A0030_기지국점검_중 {
 	static int center1[], center2[];
 
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/G01_dijkstra/G01_ex06_Adv_사전A0030_기지국점검_중.txt"));
+		System.setIn(new FileInputStream("src/test/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 
