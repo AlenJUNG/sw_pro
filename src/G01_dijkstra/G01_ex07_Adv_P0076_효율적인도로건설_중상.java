@@ -9,16 +9,16 @@ import java.util.*;
 
 public class G01_ex07_Adv_P0076_효율적인도로건설_중상 {
 	static class Node implements Comparable<Node> {
-		int v, cost;
+		int idx, dis;
 
-		public Node(int v, int cost) {
-			this.v = v;
-			this.cost = cost;
+		public Node(int idx, int dis) {
+			this.idx = idx;
+			this.dis = dis;
 		}
 
 		@Override
 		public int compareTo(Node other) {
-			if (this.cost < other.cost) {
+			if (this.dis < other.dis) {
 				return -1;
 			}
 			return 1;
@@ -26,114 +26,141 @@ public class G01_ex07_Adv_P0076_효율적인도로건설_중상 {
 	}
 
 	// 10억 + 1 > 최대간선수 (10만) * 최대 간선가중치(1만)으로 표현 가능수보다 큰 값
-	static final int MAX = 1000000001;
-	static int T, N, M;
-	static int cost_s[] = new int[50001]; // 최대 노드의 수 : 시작 S
-	static int cost_e[] = new int[50001]; // 최대 노드의 수 : 끝 E
-	static ArrayList<Node>[] graph;
-	static int answer;
+	static final int INF = 1000000001;	// edge * cost
+	static int N, M, ans;
+	static int D[], reverse_D[];
+	static ArrayList<ArrayList<Node>> graph;
 
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
 		System.setIn(new FileInputStream("src/G01_dijkstra/G01_ex07_Adv_P0076_효율적인도로건설_중상.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
 		StringTokenizer st;
 
-		T = Integer.parseInt(br.readLine());
-		for (int t = 1; t <= T; t++) {
+		int TC = Integer.parseInt(br.readLine());
+		for (int t = 1; t <= TC; t++) {
 
-			Arrays.fill(cost_s, MAX); // 순방향 배열 s를 Max (무한대) 값으로 채움
-			Arrays.fill(cost_e, MAX); // 역방향 배열 e를 Max (무한대) 값으로 채움
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
-			answer = 0; // 결과 누적 초기화
+		ans = 0;	// 결과 누적 초기화
 
-			st = new StringTokenizer(br.readLine());
-			N = Integer.parseInt(st.nextToken());
-			M = Integer.parseInt(st.nextToken());
+		D = new int[N + 1];
+		reverse_D = new int[N + 1];
 
-			graph = new ArrayList[N + 1];
-			for (int i = 1; i < N + 1; i++) {
-				graph[i] = new ArrayList<Node>();
-			}
-			// 입력값을 방향성이 없기 때문에 양방향 간선 가충치로 저장
-			for (int i = 1; i < M + 1; i++) {
-				st = new StringTokenizer(br.readLine());
-				int a = Integer.parseInt(st.nextToken());
-				int b = Integer.parseInt(st.nextToken());
-				int c = Integer.parseInt(st.nextToken());
+		Arrays.fill(D, INF);
+		Arrays.fill(reverse_D, INF);
 
-				graph[a].add(new Node(b, c));
-				graph[b].add(new Node(a, c));
-			}
-
-			// find 함수로 정/역방향으로 다익스트라 수행
-			find(1, N, cost_s);
-			find(N, 1, cost_e);
-
-			// 정방향으로 산출된 최적화 값을 Max로 지정
-			int max = cost_s[N];
-
-			// 기본 정렬 오름차순 작은값부터 정렬은 결국 끝에서부터의 값이다?
-			Arrays.sort(cost_e);
-			for (int i = 2; i < N; i++) {
-				// 끝(누적치) - (현재 기준 누적치 + 신규간선(1)) = 차이를 만족하는 간선 가중치 값?
-				int target = max - (cost_s[i] + 1);
-				int start = 1;
-				int end = N - 2; // 끝은 N과 2개 거리로 떨어진 녀석
-				int mid = 0;
-
-				// 파라메트릭 서치
-				while (start < end) { // 역전되지 않을 때까지 탐색
-					mid = (start + end) / 2;
-					if (cost_e[mid] >= target) {
-						end = mid;
-					} else {
-						start = mid + 1;
-					}
-				}
-
-				// 파라메트릭 서치로 위의 값에 충족하는 누적된 노드 값이 나옴
-				if (cost_e[mid] >= target) {
-					mid--;
-				}
-				answer += mid;
-			}
-
-			bw.write("#" + t + " " + answer);
-			bw.newLine();
+		graph = new ArrayList<ArrayList<Node>>();
+		for (int i = 0; i <= N; i++) {
+			graph.add(new ArrayList<Node>());
 		}
+		
+		// 입력값을 방향성이 없기 때문에 양방향 간선 가중치로 저장
+		int from, to, value;
+		for (int i = 1; i <= M; i++) {
+			st = new StringTokenizer(br.readLine());
+			from = Integer.parseInt(st.nextToken());
+			to = Integer.parseInt(st.nextToken());
+			value = Integer.parseInt(st.nextToken());
 
+			graph.get(from).add(new Node(to, value));
+			graph.get(to).add(new Node(from, value));
+		}
+		
+		// 정/역방향으로 다익스트라 수행
+		dijkstra(1, N, D);
+		dijkstra(N, 1, reverse_D);
+
+		// 정방향으로 산출된 최적화 값 > MAX
+		int max = D[N];
+
+		// end에서 역방향 저장 탐색 > 오름차순 정렬
+		// 파라메트릭 서치의 기본 조건 > 탐색해야하는 값 정렬
+		Arrays.sort(reverse_D);
+
+		/*
+		 * * 생각해보자 
+		 * 1. max = D[mid] + reverseD[mid] 
+		 * 2. max = D[mid] + (mid ~ mid + 1 연결된 간선 값) + reverseD[mid + 1]  
+		 * 3. 거리 (1 ~ N) = 거리 (1 ~ A) + 1 (A ~ B) + 거리 (B ~ N)
+		 * ** 완전 탐색의 시간 복잡도를 줄일수는 없을까? 우리는 아래 식을 만족하는 쌍의 개수만 필요하기 때문에 > 파라메트릭 서치를 실행한다
+		 * if ( 거리 (1 ~ N) - (거리 (1 ~ A) + 1 (A ~ B)) > 거리 (B ~ N) )
+		 */
+		
+		for (int i = 2; i < N; i++) {
+			int target = max - (D[i] + 1);
+
+			// reverse_D idx 1 ~ N -2 파라메트릭 서치 > 범위탐색
+			int start = 1;
+			// * 범위주의 : 배열 특성 > 정렬된 값 마지막은 INF이기 때문 > INF 제외
+			// 정렬했기 때문에 reverse_D[N - 1] : 도착점, reverse_D[N] = INF <> 초기 0 값
+			int end = N - 2;
+			int mid = 0;
+
+			// 아래대로 whlie문 종료 시, mid는 만족하는 값 + 1을 가리키게 된다.
+			while (start < end) {
+				mid = (start + end) / 2;
+
+				if (target <= reverse_D[mid]) {
+					end = mid;
+				} else {
+					start = mid + 1;
+				}
+			}
+
+			// * 한번 더 > 만족하는 값 +1 이 mid임을 확인
+			// 그렇다면 target > reverse_D[mid]를 만족하는 개수는 mid--
+			if (target <= reverse_D[mid]) {
+				mid--;
+			}
+
+			// 값 반영
+			ans += mid;
+		}
+		
+		bw.write("#"+t+" "+ans+"\n");
+		}
+		
+		br.close();
 		bw.flush();
 		bw.close();
+		
 	}
 
-	// find 함수 - 다익스트라 수행
-	private static void find(int start, int end, int costArr[]) {
-		costArr[start] = 0;
-		PriorityQueue<Node> pq = new PriorityQueue<Node>();
-
-		// 초기값 설정
+	private static void dijkstra(int start, int end, int[] d) {
+		PriorityQueue<Node> pq = new PriorityQueue<>();
 		pq.offer(new Node(start, 0));
+		d[start] = 0;
+//		boolean check[] = new boolean[N+1];
 
 		while (!pq.isEmpty()) {
-			Node curr = pq.poll();
-			// 최종 순회까지 업데이트 되었다면 중단
-			if (curr.v == end) {
+			Node now = pq.poll();
+
+//			if(check[now.idx]) {
+//				continue;
+//			}
+//			
+//			check[now.idx] = true;
+
+			if (now.idx == end) {
 				break;
-				// 현재 Cost 값보다 크다면 갱신 안함
 			}
-			if (costArr[curr.v] < curr.cost) {
+
+			if (d[now.idx] < now.dis) {
 				continue;
 			}
-			// 자신을 기준으로 탐색할 수 있는 자식들을 체크
-			for (Node child : graph[curr.v]) {
-				// 현재 값보다 값이 작다면 갱신하고 Queue에 넣어 실행
-				if (costArr[child.v] > curr.cost + child.cost) {
-					costArr[child.v] = curr.cost + child.cost;
-					pq.offer(new Node(child.v, costArr[child.v]));
+
+			for (Node next : graph.get(now.idx)) {
+				if (d[next.idx] > d[now.idx] + next.dis) {
+					d[next.idx] = d[now.idx] + next.dis;
+					pq.offer(new Node(next.idx, d[next.idx]));
 				}
 			}
+
 		}
+
 	}
 }

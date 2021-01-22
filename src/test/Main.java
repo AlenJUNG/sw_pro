@@ -3,163 +3,164 @@ package test;
 import java.io.*;
 import java.util.*;
 
+/* 최대 40개의 test case 입력시 java 2초
+ * 0.05초 50ms 500만 크기
+ */
+
 public class Main {
 	static class Node implements Comparable<Node> {
-		int start;
-		int end;
-		long cost;
+		int idx, dis;
 
-		public Node(int start, int end, long cost) {
-			this.start = start;
-			this.end = end;
-			this.cost = cost;
+		public Node(int idx, int dis) {
+			this.idx = idx;
+			this.dis = dis;
 		}
 
 		@Override
 		public int compareTo(Node other) {
-			if (this.cost < other.cost) {
+			if (this.dis < other.dis) {
 				return -1;
 			}
 			return 1;
 		}
-
 	}
 
-	static final long INF = 1000000000001L;
-	static int TC;
-	static int N, E, C, K, M;
+	// 10억 + 1 > 최대간선수 (10만) * 최대 간선가중치(1만)으로 표현 가능수보다 큰 값
+	static final int INF = 1000000001;	// edge * cost
+	static int N, M, ans;
+	static int D[], reverse_D[];
 	static ArrayList<ArrayList<Node>> graph;
-	static long D1[], D2[];
-	static int center1[], center2[];
 
 	public static void main(String[] args) throws IOException {
 		System.setIn(new FileInputStream("src/test/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
 		StringTokenizer st;
 
-		TC = Integer.parseInt(br.readLine());
+		int TC = Integer.parseInt(br.readLine());
 		for (int t = 1; t <= TC; t++) {
 
-			st = new StringTokenizer(br.readLine());
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
-			N = Integer.parseInt(st.nextToken()); // 노드 수
-			E = Integer.parseInt(st.nextToken()); // 간선 수
-			C = Integer.parseInt(st.nextToken()); // 기술센터 수
-			K = Integer.parseInt(st.nextToken()); // 기술센터 + 기지국 수
-			M = Integer.parseInt(st.nextToken()); // 기술센터별 기술자
-			
-			graph = new ArrayList<ArrayList<Node>>();
-			for (int i = 0; i <= N; i++) {
-				graph.add(new ArrayList<Node>());
-			}
+		ans = 0;	// 결과 누적 초기화
 
-			D1 = new long[N + 1];
-			Arrays.fill(D1, INF);
-			center1 = new int[N + 1]; // 1번째 다익스트라 시 사용되는 도착노드에서 파견된 엔지니어 기술센터 정보
+		D = new int[N + 1];
+		reverse_D = new int[N + 1];
 
-			int from, to, cost;
+		Arrays.fill(D, INF);
+		Arrays.fill(reverse_D, INF);
 
-			for (int i = 1; i <= E; i++) {
-				st = new StringTokenizer(br.readLine());
-				from = Integer.parseInt(st.nextToken());
-				to = Integer.parseInt(st.nextToken());
-				cost = Integer.parseInt(st.nextToken());
-
-				graph.get(from).add(new Node(from, to, cost));
-				graph.get(to).add(new Node(from, to, cost));
-			}
-
-			dijkstra(0, graph, D1, center1); // 1번 째 다익스트라
-			
-			
-			int cntCenter[] = new int[C + 1];
-			int max = 0;
-			int maxCenter = 0;
-			long ans = 0;
-
-			for (int i = C + 1; i <= K; i++) { // 점검 필요한 기지국 번호로 반복
-				cntCenter[center1[i]]++; // 파견보낸 기술센터를 찾아 카운팅
-				ans += D1[i]; // #STEP01 : ans > 점검 필요한 기지국까지의 최단거리 시간을 더함
-
-				// 초과 엔지니어 센터 찾기
-				if (max < cntCenter[center1[i]]) { // 계속해서 초과되었는지 확인
-					max = cntCenter[center1[i]]; // 파견보낸 기술센터의 엔지니어 수 계속해서 카운팅
-					maxCenter = center1[i]; // 초과 센터 입력
-				}
-			}
-
-			// 초과 엔지니어 센터가 없으면 끝이지만 만약 있다면 2번째 다익스트라 실행
-			if (max > 0) {
-				D2 = new long[N + 1];
-				center2 = new int[N + 1]; // 2번째 다익스트라 시 사용되는 도착노드에서 파견된 엔지니어 기술센터 정보
-				Arrays.fill(D2, INF);
-
-				// 2번째 다익스트라 : * 초과 엔지니어 센터 빼고 돌림
-				dijkstra(maxCenter, graph, D2, center2); // 2번째 다익스트라
-
-				// 비교 : 1번째 다익에서 엔지니어 초과났던 센터의 엔지니어 수만큼 배열 생성
-				long diff[] = new long[cntCenter[maxCenter]];
-				int cnt = 0;
-
-				for (int i = C + 1; i <= K; i++) { // 기지국 반복
-					if (center1[i] == maxCenter) { // 1번째 다익에서 해당 기지국에 파견보낸 기술센터 == 초과 엔지니어 센터라면
-						// 첫 최소값과 2번째 최소값 차이 계산
-						diff[cnt++] = Math.abs(D2[i] - D1[i]); // 기법 배우기
-					}
-				}
-
-				Arrays.sort(diff); // 오름차순 정렬
-				long min = 0;
-
-				// 초과된 엔지니어 수 = 총 필요 엔지니어 수 - (기술센터당 엔지니어 수)
-				for (int i = 0; i < max - M; i++) {
-					min += diff[i];
-				}
-				ans += min; // #STEP02 : ans > 차이를 더함
-			}
-			System.out.println(ans);
-		}
-		br.close();
-	}
-	
-
-	// * k에 주의 : 1번째 다익 시에는 상관없지만 2번째 다익시에는 엔지니어 초과나는 센터를 빼고 돌림을 명심
-	private static void dijkstra(int k, ArrayList<ArrayList<Node>> gra, long[] d, int[] center) {
-		PriorityQueue<Node> pq = new PriorityQueue<>();
-		boolean check[] = new boolean[N + 1];
-
-		// 기술센터 노드를 시작점으로 한 번에 삽입 후 다익스트라 돌림
-		for (int i = 1; i <= C; i++) {
-			if (i != k) {
-				pq.offer(new Node(0, i, 0)); // * 시작점은 0으로 setting
-				d[i] = 0;
-			}
+		graph = new ArrayList<ArrayList<Node>>();
+		for (int i = 0; i <= N; i++) {
+			graph.add(new ArrayList<Node>());
 		}
 		
+		// 입력값을 방향성이 없기 때문에 양방향 간선 가중치로 저장
+		int from, to, value;
+		for (int i = 1; i <= M; i++) {
+			st = new StringTokenizer(br.readLine());
+			from = Integer.parseInt(st.nextToken());
+			to = Integer.parseInt(st.nextToken());
+			value = Integer.parseInt(st.nextToken());
+
+			graph.get(from).add(new Node(to, value));
+			graph.get(to).add(new Node(from, value));
+		}
+		
+		// 정/역방향으로 다익스트라 수행
+		dijkstra(1, N, D);
+		dijkstra(N, 1, reverse_D);
+
+		// 정방향으로 산출된 최적화 값 > MAX
+		int max = D[N];
+
+		// end에서 역방향 저장 탐색 > 오름차순 정렬
+		// 파라메트릭 서치의 기본 조건 > 탐색해야하는 값 정렬
+		Arrays.sort(reverse_D);
+
+		/*
+		 * * 생각해보자 
+		 * 1. max = D[mid] + reverseD[mid] 
+		 * 2. max = D[mid] + (mid ~ mid + 1 연결된 간선 값) + reverseD[mid + 1]  
+		 * 3. 거리 (1 ~ N) = 거리 (1 ~ A) + 1 (A ~ B) + 거리 (B ~ N)
+		 * ** 완전 탐색의 시간 복잡도를 줄일수는 없을까? 우리는 아래 식을 만족하는 쌍의 개수만 필요하기 때문에 > 파라메트릭 서치를 실행한다
+		 * if ( 거리 (1 ~ N) - (거리 (1 ~ A) + 1 (A ~ B)) > 거리 (B ~ N) )
+		 */
+		
+		for (int i = 2; i < N; i++) {
+			int target = max - (D[i] + 1);
+
+			// reverse_D idx 1 ~ N -2 파라메트릭 서치 > 범위탐색
+			int start = 1;
+			// * 범위주의 : 배열 특성 > 정렬된 값 마지막은 INF이기 때문 > INF 제외
+			// 정렬했기 때문에 reverse_D[N - 1] : 도착점, reverse_D[N] = INF <> 초기 0 값
+			int end = N - 2;
+			int mid = 0;
+
+			// 아래대로 whlie문 종료 시, mid는 만족하는 값 + 1을 가리키게 된다.
+			while (start < end) {
+				mid = (start + end) / 2;
+
+				if (target <= reverse_D[mid]) {
+					end = mid;
+				} else {
+					start = mid + 1;
+				}
+			}
+
+			// * 한번 더 > 만족하는 값 +1 이 mid임을 확인
+			// 그렇다면 target > reverse_D[mid]를 만족하는 개수는 mid--
+			if (target <= reverse_D[mid]) {
+				mid--;
+			}
+
+			// 값 반영
+			ans += mid;
+		}
+		
+		bw.write("#"+t+" "+ans+"\n");
+		}
+		
+		br.close();
+		bw.flush();
+		bw.close();
+		
+	}
+
+	private static void dijkstra(int start, int end, int[] d) {
+		PriorityQueue<Node> pq = new PriorityQueue<>();
+		pq.offer(new Node(start, 0));
+		d[start] = 0;
+//		boolean check[] = new boolean[N+1];
+
 		while (!pq.isEmpty()) {
 			Node now = pq.poll();
-			
-			if (check[now.end]) {
+
+//			if(check[now.idx]) {
+//				continue;
+//			}
+//			
+//			check[now.idx] = true;
+
+			if (now.idx == end) {
+				break;
+			}
+
+			if (d[now.idx] < now.dis) {
 				continue;
 			}
 
-			check[now.end] = true;
-
-			for (Node next : gra.get(now.end)) {
-				if (d[next.end] > d[now.end] + next.cost) {
-					d[next.end] = d[now.end] + next.cost;
-					pq.offer(new Node(next.start, next.end, d[next.end]));
-
-					// 방문한 기지국의 엔지니어는 어느 "기술센터"에서 왔는지 기록하는 과정
-					int start = next.start; // 어디서 왔니? 도착노드의 출발노드 입력
-
-					if (next.start > K) { // 출발노드가 기술센터가 아니라면
-						start = center[now.end]; // 출발노드의 유래를 start에 입력
-					}
-					// 도착노드가 어느 기술센터로부터 왔는지 입력됌
-					center[next.end] = start;
+			for (Node next : graph.get(now.idx)) {
+				if (d[next.idx] > d[now.idx] + next.dis) {
+					d[next.idx] = d[now.idx] + next.dis;
+					pq.offer(new Node(next.idx, d[next.idx]));
 				}
 			}
+
 		}
+
 	}
 }
