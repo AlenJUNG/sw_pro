@@ -93,7 +93,7 @@ public class Main {
 	private static int LCA(int a, int b) {
 		// A. 두 노드의 depth 맞추기
 		// A-1 : b가 더 깊도록 설정
-		if (a > b) {
+		if (depth[a] > depth[b]) {
 			int temp;
 			temp = a;
 			a = b;
