@@ -14,6 +14,7 @@ public class test {
 	public static void main(String[] args) throws IOException {
 		System.setIn(new FileInputStream("src/G06_LCA/G06_ex06_P0051_조상이키컸으면.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st = null;
 
 		T = Integer.parseInt(br.readLine());
@@ -52,13 +53,15 @@ public class test {
 			}
 
 			BFS(1);
-			
-			System.out.print("#"+tc+" ");
+
+			StringBuilder sb = new StringBuilder();
+			sb.append("#" + tc);
+
 			// Q 최종 구할 케이스 수 > 다수의 공통조상 구하기
 			for (int i = 1; i <= Q; i++) {
 				st = new StringTokenizer(br.readLine());
-				
-				k = Integer.parseInt(st.nextToken());	// 모임에 속한 구성원 개수
+
+				k = Integer.parseInt(st.nextToken()); // 모임에 속한 구성원 개수
 				// 구할 첫 번째 구성원 번호
 				a = Integer.parseInt(st.nextToken());
 
@@ -68,13 +71,16 @@ public class test {
 					a = LCA(a, b);
 				}
 				// 최종 값 Max Height[a]
-				System.out.print(MH[a] + " ");
-			}
-			System.out.println();
+				sb.append(" " + MH[a]);
 
+			}
+			bw.write(sb.toString());
+			bw.newLine();			
 		}
 
 		br.close();
+		bw.flush();
+		bw.close();
 	}
 
 	private static void BFS(int start) {

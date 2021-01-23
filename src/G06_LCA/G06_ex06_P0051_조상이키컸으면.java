@@ -59,6 +59,7 @@ public class G06_ex06_P0051_조상이키컸으면 {
 		}
 
 		br.close();
+		
 	}
 
 	private static void DFS(int start) {
