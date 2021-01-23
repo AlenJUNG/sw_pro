@@ -13,7 +13,9 @@ public class G06_ex06_P0051_조상이키컸으면 {
 	public static void main(String[] args) throws IOException {
 		System.setIn(new FileInputStream("src/G06_LCA/G06_ex06_P0051_조상이키컸으면.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st = null;
+		StringBuilder sb = null;
 
 		T = Integer.parseInt(br.readLine());
 
@@ -43,7 +45,9 @@ public class G06_ex06_P0051_조상이키컸으면 {
 					parent[k][i] = parent[k - 1][parent[k - 1][i]];
 				}
 			}
-
+			
+			sb = new StringBuilder();
+			sb.append("#" + tc);
 			for (int i = 1; i <= Q; i++) {
 				st = new StringTokenizer(br.readLine());
 				k = Integer.parseInt(st.nextToken());
@@ -53,12 +57,17 @@ public class G06_ex06_P0051_조상이키컸으면 {
 					b = Integer.parseInt(st.nextToken());
 					a = LCA(a, b);
 				}
-				System.out.print(MH[a] + " ");
+//				System.out.print(MH[a] + " ");
+				sb.append(" " + MH[a]);
 			}
+			bw.write(sb.toString());
+			bw.newLine();
 
 		}
 
 		br.close();
+		bw.flush();
+		bw.close();
 		
 	}
 
