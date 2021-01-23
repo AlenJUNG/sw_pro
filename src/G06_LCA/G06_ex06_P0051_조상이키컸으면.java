@@ -1,5 +1,7 @@
 package G06_LCA;
 
+// 제출오류 뜸
+
 import java.io.*;
 import java.util.*;
 

@@ -1,4 +1,5 @@
 package G06_LCA;
+// G06_ex06_P0051_조상이키컸으면 작성중
 
 import java.io.*;
 import java.util.*;
