@@ -5,9 +5,9 @@ import java.util.*;
 
 public class G06_ex05_연습P0010_상인 {
 	static int MAX_N = 100000;
-	static int MAX_D = 14;
+	static int MAX_D = 17;
 	static int N, TC, ans;
-	static int depth[], time[], parent[][];
+	static int depth[], parent[][];
 	static ArrayList<ArrayList<Integer>> graph;
 
 	public static void main(String[] args) throws IOException {
@@ -23,7 +23,6 @@ public class G06_ex05_연습P0010_상인 {
 			N = Integer.parseInt(br.readLine());
 
 			depth = new int[N + 1];
-			time = new int[N + 1];
 			parent = new int[MAX_D + 1][MAX_N + 1];
 			graph = new ArrayList<ArrayList<Integer>>();
 			for (int i = 0; i <= N; i++) {
@@ -44,10 +43,8 @@ public class G06_ex05_연습P0010_상인 {
 
 			ans = 0;
 
-			ans += depth[2];
-
 			int root_node;
-			for (int i = 2; i <= N - 1; i++) {
+			for (int i = 1; i <= N - 1; i++) {
 				root_node = LCA(i, i + 1);
 				ans += (depth[i] + depth[i + 1] - 2 * depth[root_node]);
 			}
@@ -66,7 +63,6 @@ public class G06_ex05_연습P0010_상인 {
 		q.offer(start);
 		depth[start] = 0;
 		parent[0][start] = 0;
-		time[start] = 0;
 
 		while (!q.isEmpty()) {
 			int now = q.poll();
@@ -82,7 +78,6 @@ public class G06_ex05_연습P0010_상인 {
 				q.offer(next);
 				depth[next] = depth[now] + 1;
 				parent[0][next] = now;
-				time[next] = time[now] + 1;
 
 				for (int i = 1; i <= MAX_D; i++) {
 					if (parent[i - 1][next] == 0) {
@@ -101,12 +96,21 @@ public class G06_ex05_연습P0010_상인 {
 			a = b;
 			b = temp;
 		}
-
+		
+		int t = depth[b] - depth[a];
 		for (int i = MAX_D; i >= 0; i--) {
-			if (depth[b] - depth[a] >= Math.pow(2, i)) {
+			if ((t & (1 << i)) > 0) {
 				b = parent[i][b];
 			}
 		}
+		
+		
+		// 아래처럼하면 제한시간 초과 뜸
+//		for (int i = MAX_D; i >= 0; i--) {
+//			if (depth[b] - depth[a] >= Math.pow(2, i)) {
+//				b = parent[i][b];
+//			}
+//		}
 
 		if (a == b) {
 			return a;
