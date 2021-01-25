@@ -12,6 +12,7 @@ public class D04_ex01_연습P0019_구간합 {
 	public static void main(String[] args) throws IOException {
 		System.setIn(new FileInputStream("src/D04_인덱스트리/D04_ex01_연습P0019_구간합.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
 
 		T = Integer.parseInt(br.readLine());
@@ -58,11 +59,12 @@ public class D04_ex01_연습P0019_구간합 {
 					ans += getSum(x, y);
 				}
 			}
-
-			System.out.println(ans % 1000000007);
-
+			bw.write("#" + tc + " " + (ans % 1_000_000_007));
+			bw.newLine();
 		}
 		br.close();
+		bw.flush();
+		bw.close();
 
 	}
 

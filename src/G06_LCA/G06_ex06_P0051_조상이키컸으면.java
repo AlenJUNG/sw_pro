@@ -6,18 +6,19 @@ import java.io.*;
 import java.util.*;
 
 public class G06_ex06_P0051_조상이키컸으면 {
-	static int MAX_N = 10000;
-	static int MAX_D = 14;
+	static int MAX_N = 100_000;
+	static int MAX_D = 17;
 	static int T, N, Q;
 	static int a, b, k;
 	static int parent[][], H[], depth[], MH[];
+	static ArrayList<ArrayList<Integer>> graph;
 
 	public static void main(String[] args) throws IOException {
 		System.setIn(new FileInputStream("src/G06_LCA/G06_ex06_P0051_조상이키컸으면.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st = null;
-		StringBuilder sb = null;
+		StringTokenizer st;
+		StringBuilder sb;
 
 		T = Integer.parseInt(br.readLine());
 
@@ -27,26 +28,37 @@ public class G06_ex06_P0051_조상이키컸으면 {
 			N = Integer.parseInt(st.nextToken());
 			Q = Integer.parseInt(st.nextToken());
 
-			parent = new int[MAX_D + 1][N + 1];
+			parent = new int[MAX_D + 1][MAX_N + 1];
 			depth = new int[N + 1];
 			H = new int[N + 1];
 			MH = new int[N + 1];
-
-			for (int i = 1; i <= N; i++) {
+			
+			graph = new ArrayList<ArrayList<Integer>>();
+			for(int i = 0; i <= N; i++) {
+				graph.add(new ArrayList<Integer>());
+			}
+			
+			int p_info;
+			for (int child_info = 1; child_info <= N; child_info++) {
 				st = new StringTokenizer(br.readLine());
-				parent[0][i] = Integer.parseInt(st.nextToken());
-				H[i] = Integer.parseInt(st.nextToken());
+				p_info = Integer.parseInt(st.nextToken());
+				
+				graph.get(child_info).add(p_info);
+				graph.get(p_info).add(child_info);
+				H[child_info] = Integer.parseInt(st.nextToken());
 			}
+			
+			BFS(1);
 
-			for (int i = 1; i <= N; i++) {
-				DFS(i);
-			}
-
-			for (int k = 1; k <= MAX_D; k++) {
-				for (int i = 1; i <= N; i++) {
-					parent[k][i] = parent[k - 1][parent[k - 1][i]];
-				}
-			}
+//			for (int i = 1; i <= N; i++) {
+//				DFS(i);
+//			}
+//
+//			for (int k = 1; k <= MAX_D; k++) {
+//				for (int i = 1; i <= N; i++) {
+//					parent[k][i] = parent[k - 1][parent[k - 1][i]];
+//				}
+//			}
 			
 			sb = new StringBuilder();
 			sb.append("#" + tc);
@@ -73,6 +85,38 @@ public class G06_ex06_P0051_조상이키컸으면 {
 		
 	}
 
+	private static void BFS(int start) {
+		Queue<Integer> q = new LinkedList<>();
+		q.offer(start);
+		depth[start] = 0;
+		parent[0][start] = 0;
+		MH[start] = 2;
+		
+		while(!q.isEmpty()) {
+			int now = q.poll();
+			
+			for(int toIdx = 0; toIdx < graph.get(now).size(); toIdx++) {
+				int next = graph.get(now).get(toIdx);
+				
+				if(next == parent[0][now]) {
+					continue;
+				}
+				
+				q.offer(next);
+				depth[next] = depth[now] + 1;
+				parent[0][next] = now;
+				MH[next] = Math.max(H[next], H[now]);
+				
+				for(int i = 1; i <= MAX_D; i++) {
+					if(parent[i-1][next] == 0) {
+						break;
+					}
+					parent[i][next] = parent[i-1][parent[i-1][next]];
+				}
+			}
+		}
+	}
+
 	private static void DFS(int start) {
 		// 0이거나 뎁스가 미리 입력이 되어 있으면 return
 		if (start == 0 || depth[start] > 0) {
@@ -94,7 +138,7 @@ public class G06_ex06_P0051_조상이키컸으면 {
 		}
 
 		for (int i = MAX_D; i >= 0; i--) {
-			if (depth[b] - depth[a] >= Math.pow(2, i)) {
+			if (depth[b] - depth[a] >= (1 << i)) {
 				b = parent[0][b];
 			}
 		}
