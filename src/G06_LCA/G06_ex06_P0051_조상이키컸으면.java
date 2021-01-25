@@ -38,14 +38,15 @@ public class G06_ex06_P0051_조상이키컸으면 {
 				graph.add(new ArrayList<Integer>());
 			}
 			
-			int p_info;
+			int p_info, child_h;
 			for (int child_info = 1; child_info <= N; child_info++) {
 				st = new StringTokenizer(br.readLine());
 				p_info = Integer.parseInt(st.nextToken());
-				
+				child_h = Integer.parseInt(st.nextToken());
 				graph.get(child_info).add(p_info);
 				graph.get(p_info).add(child_info);
-				H[child_info] = Integer.parseInt(st.nextToken());
+				H[child_info] = child_h;
+				MH[child_info] = child_h;
 			}
 			
 			BFS(1);
@@ -62,15 +63,26 @@ public class G06_ex06_P0051_조상이키컸으면 {
 			
 			sb = new StringBuilder();
 			sb.append("#" + tc);
-			for (int i = 1; i <= Q; i++) {
+			
+			for (int i = 1; i <= Q; i++) {	// 3번 반복
 				st = new StringTokenizer(br.readLine());
-				k = Integer.parseInt(st.nextToken());
-				a = Integer.parseInt(st.nextToken());
-
-				for (int j = 2; j <= k; j++) {
+				k = Integer.parseInt(st.nextToken());	// 모임 구성원 수
+				a = Integer.parseInt(st.nextToken());	// 맨 처음 수
+				
+				while(k-- > 1) {
 					b = Integer.parseInt(st.nextToken());
 					a = LCA(a, b);
+					
+					if(a == 1) {
+						break;
+					}
 				}
+				
+//
+//				for (int j = 2; j <= k; j++) {
+//					b = Integer.parseInt(st.nextToken());
+//					a = LCA(a, b);
+//				}
 //				System.out.print(MH[a] + " ");
 				sb.append(" " + MH[a]);
 			}
@@ -90,7 +102,6 @@ public class G06_ex06_P0051_조상이키컸으면 {
 		q.offer(start);
 		depth[start] = 0;
 		parent[0][start] = 0;
-		MH[start] = 2;
 		
 		while(!q.isEmpty()) {
 			int now = q.poll();
@@ -105,7 +116,7 @@ public class G06_ex06_P0051_조상이키컸으면 {
 				q.offer(next);
 				depth[next] = depth[now] + 1;
 				parent[0][next] = now;
-				MH[next] = Math.max(H[next], H[now]);
+				MH[next] = Math.max(MH[next], MH[now]);
 				
 				for(int i = 1; i <= MAX_D; i++) {
 					if(parent[i-1][next] == 0) {
