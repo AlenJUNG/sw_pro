@@ -1,5 +1,16 @@
 package O02_정렬_Comparable;
 
+/* 
+ * 1. Compare 함수는 2개의 데이터의 위치에 대하여 Swap 여부를 결정하는 함수
+ * 2. Compare 함수의 인자 중 앞에 있는 데이터가 위치적으로 앞에 있는 데이터
+ * 3. o1 데이터와 o2 데이터의 위치를 서로 바꾸어야하는지 확인
+ * 4. Compare 함수가 리턴하는 값에 따라 두 데이터의 Swap 여부 결정
+ * < Return value : o1 - o2>
+ * 	if(o1 < o2) return -1 : 두 데이터를 바꾸지 않음
+ *  if(o1 < o2) return 0 : 두 데이터가 동일함
+ *  if(o1 < o2) return 1 : 두 데이터를 바꿈
+ */
+
 import java.util.*;
 import java.io.*;
 
