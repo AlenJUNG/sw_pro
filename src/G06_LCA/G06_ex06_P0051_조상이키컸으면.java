@@ -1,6 +1,10 @@
 package G06_LCA;
 
-// 제출오류 뜸
+/* (2021.01.25)
+ * 1. LCA 함수에서 math.pow 대신 1 << i 비트연산으로 시간 복잡도 줄임
+ * 2. LCA 함수에서 parent[i][b] 를 parent[0][b] 으로 잘못 작성하였음
+ */
+
 
 import java.io.*;
 import java.util.*;
@@ -69,6 +73,7 @@ public class G06_ex06_P0051_조상이키컸으면 {
 				k = Integer.parseInt(st.nextToken());	// 모임 구성원 수
 				a = Integer.parseInt(st.nextToken());	// 맨 처음 수
 				
+				// Opt 01.
 				// a가 하나라면 아래 while 문을 돌지 않음
 				while(k-- > 1) {
 					b = Integer.parseInt(st.nextToken());
@@ -79,12 +84,12 @@ public class G06_ex06_P0051_조상이키컸으면 {
 					}
 				}
 				
-//
+				// Opt 02.
 //				for (int j = 2; j <= k; j++) {
 //					b = Integer.parseInt(st.nextToken());
 //					a = LCA(a, b);
 //				}
-//				System.out.print(MH[a] + " ");
+				
 				sb.append(" " + MH[a]);
 			}
 			bw.write(sb.toString());
@@ -117,6 +122,7 @@ public class G06_ex06_P0051_조상이키컸으면 {
 				q.offer(next);
 				depth[next] = depth[now] + 1;
 				parent[0][next] = now;
+				// * 이 문제에서는 key Point
 				MH[next] = Math.max(MH[next], MH[now]);
 				
 				for(int i = 1; i <= MAX_D; i++) {
@@ -128,18 +134,19 @@ public class G06_ex06_P0051_조상이키컸으면 {
 			}
 		}
 	}
-
-	private static void DFS(int start) {
-		// 0이거나 뎁스가 미리 입력이 되어 있으면 return
-		if (start == 0 || depth[start] > 0) {
-			return;
-		}
-		DFS(parent[0][start]);
-		depth[start] = depth[parent[0][start]] + 1;
-		// 아래 코드 중요
-		MH[start] = Math.max(H[start], MH[parent[0][start]]);
-
-	}
+	
+//  * Option : DFS 방법 > Stack mem 초과 위험 있음
+//	private static void DFS(int start) {
+//		// 0이거나 depth가 미리 입력이 되어 있으면 return
+//		if (start == 0 || depth[start] > 0) {
+//			return;
+//		}
+//		DFS(parent[0][start]);
+//		depth[start] = depth[parent[0][start]] + 1;
+//		// 아래 코드 중요
+//		MH[start] = Math.max(H[start], MH[parent[0][start]]);
+//
+//	}
 
 	private static int LCA(int a, int b) {
 		if (depth[a] > depth[b]) {
@@ -150,8 +157,9 @@ public class G06_ex06_P0051_조상이키컸으면 {
 		}
 
 		for (int i = MAX_D; i >= 0; i--) {
-			if (depth[b] - depth[a] >= (1 << i)) {
-				b = parent[i][b];
+			// ** (1 << i) 은 2^i를 의미, 시간 복잡도를 줄이는 key Code
+			if (depth[b] - depth[a] >= (1 << i)) {	
+				b = parent[i][b];	// > fail : 0인지 i인지 잘보기
 			}
 		}
 
