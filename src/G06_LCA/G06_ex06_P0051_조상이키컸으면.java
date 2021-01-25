@@ -1,5 +1,10 @@
 package G06_LCA;
 
+/* LCA 시간 복잡도 : O(logN)
+ * 쿼리가 함께 존재하는 경우 : O(MlogN) = 10000 * log 10000 = 133,800 (0.00133) * 30 = 4,014,000
+ * >> 대략 0.4초
+ */
+
 /* (2021.01.25)
  * 1. LCA 함수에서 math.pow 대신 1 << i 비트연산으로 시간 복잡도 줄임
  * 2. LCA 함수에서 parent[i][b] 를 parent[0][b] 으로 잘못 작성하였음
@@ -75,6 +80,7 @@ public class G06_ex06_P0051_조상이키컸으면 {
 				
 				// Opt 01.
 				// a가 하나라면 아래 while 문을 돌지 않음
+				// i, i+1 관계로 계속 반복함 ex) 3개 값의 LCA를 찾으려면 2번 반복
 				while(k-- > 1) {
 					b = Integer.parseInt(st.nextToken());
 					a = LCA(a, b);
