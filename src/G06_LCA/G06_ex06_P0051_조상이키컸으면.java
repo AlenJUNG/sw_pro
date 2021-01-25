@@ -69,6 +69,7 @@ public class G06_ex06_P0051_조상이키컸으면 {
 				k = Integer.parseInt(st.nextToken());	// 모임 구성원 수
 				a = Integer.parseInt(st.nextToken());	// 맨 처음 수
 				
+				// a가 하나라면 아래 while 문을 돌지 않음
 				while(k-- > 1) {
 					b = Integer.parseInt(st.nextToken());
 					a = LCA(a, b);
@@ -100,8 +101,8 @@ public class G06_ex06_P0051_조상이키컸으면 {
 	private static void BFS(int start) {
 		Queue<Integer> q = new LinkedList<>();
 		q.offer(start);
-		depth[start] = 0;
-		parent[0][start] = 0;
+		depth[start] = 0;	// 생략해도 무방
+		parent[0][start] = 0;	// 생략해도 무방
 		
 		while(!q.isEmpty()) {
 			int now = q.poll();
@@ -150,7 +151,7 @@ public class G06_ex06_P0051_조상이키컸으면 {
 
 		for (int i = MAX_D; i >= 0; i--) {
 			if (depth[b] - depth[a] >= (1 << i)) {
-				b = parent[0][b];
+				b = parent[i][b];
 			}
 		}
 
