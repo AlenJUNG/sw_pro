@@ -1,4 +1,8 @@
 package D04_인덱스트리;
+/* 
+ * 인덱스 트리 > 1, 2, 3, 4, 5, 0, 0, 0 <
+ * 그래프 그려서 작성 완료하자
+ */
 
 import java.util.*;
 import java.io.*;
@@ -67,7 +71,7 @@ public class D04_ex01_연습P0019_구간합 {
 		bw.close();
 
 	}
-
+	
 	private static long getSum(int start, int end) {
 		long sum = 0; // * 지역변수는 초기화 반드시 필요
 
@@ -75,7 +79,7 @@ public class D04_ex01_연습P0019_구간합 {
 		s = start + size - 1; // 합을 구할 start idx 구하기
 		e = end + size - 1; // 합을 구할 end idx 구하기
 
-		while (s <= e) {
+		while (s <= e) {	// * while 부호 조심
 			if (s % 2 == 1) { // s가 홀수일 경우에만
 				sum += arr[s]; // 1. 현 위치의 값 더하고
 				s++; // 2. 오른쪽으로 한 칸 이동 (부모노드가 오른쪽으로 바뀜)
