@@ -3,110 +3,106 @@ package G05_Kruskal;
 import java.util.*;
 import java.io.*;
 
+// * MST 구하는 기본 문제 > 반복할 것
 public class G05_Kruskal {
-	static class Edge implements Comparable<Edge>{
-		int distance;
-		int node_A;
-		int node_B;
-		
-		public Edge(int distance, int node_A, int node_B) {
-			this.distance = distance;
-			this.node_A = node_A;
-			this.node_B = node_B;
+	static class Node implements Comparable<Node> {
+		int from, to, cost;
+
+		public Node(int from, int to, int cost) {
+			this.from = from;
+			this.to = to;
+			this.cost = cost;
 		}
-		
-		public int getDis() {
-			return this.distance;
-		}
-		
-		public int getNode_A() {
-			return this.node_A;
-		}
-		
-		public int getNode_B() {
-			return this.node_B;
-		}
-		
-		// 거리(비용)이 짧은 것이 높은 우선순위를 가지도록 설정
+
 		@Override
-		public int compareTo(Edge other) {
-			if(this.distance < other.distance) {
+		public int compareTo(Node other) {
+			if (this.cost < other.cost) {
 				return -1;
 			}
 			return 1;
 		}
 	}
-	
-	// 노드의 개수(V)와 간선(Union 연산)의 개수(E)
-	// 노드의 개수는 최대 100,000개라고 가정
-	static int V, E;
-	static int parent[];
-	static ArrayList<Edge> edges;
-	static int result = 0;
-	
-	public static void main(String[] args) throws IOException{
+
+	static int N, M;	// 노드 수, 간선 수
+	static int root[];	// 조상, 최종 Union할 최고조상, root 배열
+	static ArrayList<Node> graph;	// 간선연결
+	static int ans;	// 답
+
+	public static void main(String[] args) throws IOException {
 		System.setIn(new FileInputStream("src/G05_Kruskal/G05_Kruskal.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		
-		V = Integer.parseInt(st.nextToken());
-		E = Integer.parseInt(st.nextToken());
-		
-		parent = new int[100001];
-		edges = new ArrayList<Edge>();
-		
-		// 부모 테이블상에서 부모를 자기 자신으로 초기화
-		for(int i = 1; i <= V; i++) {
-			parent[i] = i;
+
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		// SPTE01. 조상배열에 노드 자신의 값을 모두 넣어줌
+		root = new int[N + 1];
+
+		for (int i = 1; i <= N; i++) {
+			root[i] = i; // root[i] = 1로 해서 오류남
 		}
 		
-		// 모든 간선에 대한 정보를 입력 받기
-		for(int i = 0; i < E; i++) {
+		// STEP02. 간선 표현
+		// graph에 들어가는 Node 클래스는 클래스에서 Comparable 해준다
+		graph = new ArrayList<Node>();
+
+		for (int i = 1; i <= M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			int cost = Integer.parseInt(st.nextToken());
-			
-			edges.add(new Edge(cost, a, b));
+			int f = Integer.parseInt(st.nextToken());
+			int t = Integer.parseInt(st.nextToken());
+			int c = Integer.parseInt(st.nextToken());
+
+			graph.add(new Node(f, t, c)); // 양방향 간선 확인
+			graph.add(new Node(t, f, c));
 		}
+
+		// STEP03. cost 오름차순으로 정렬
+		Collections.sort(graph);
+
+		ans = 0;
 		
-		// 간선을 비용 순으로 정렬
-		Collections.sort(edges);
-		
-		// 간선을 하나씩 확인하며
-		for(int i = 0; i < edges.size(); i++) {
-			int cost = edges.get(i).getDis();
-			int a = edges.get(i).getNode_A();
-			int b = edges.get(i).getNode_B();
-			
-			// 사이클이 발생하지 않는 경우에만 집합에 포함
-			if(findParent(a) != findParent(b)) {
-				unionParent(a, b);
-				result += cost;
+		// STEP04. 최적 간선, MST 구하기
+		for (int i = 0; i < graph.size(); i++) {
+			int from = graph.get(i).from;
+			int to = graph.get(i).to;
+			int cost = graph.get(i).cost;
+
+			// 사이클이 발생하지 않는 경우만(서로소일 때) 간선을 이어줌
+			// 간선을 이어주면서 cost의 값을 구할 수 있음
+			// 최적의 MST 값
+			if (findRoot(from) != findRoot(to)) {	// 서로소일 때
+				Union(from, to);					// Union
+				ans += cost;						// 간선 이어주며 cost값 구함
 			}
 		}
-		System.out.println(result);
+
+		System.out.println(ans);	// 최종값
+
 	}
 
-	// 두 원소가 속한 집합을 합치기
-	private static void unionParent(int a, int b) {
-		a = findParent(a);
-		b = findParent(b);
-		
-		if(a < b) {
-			parent[b] = a;
-		}else {
-			parent[a] = b;
-		}	
-	}
-	
-	// 특정 원소가 속한 집합을 찾기
-	private static int findParent(int x) {
-		// 루트노드가 아니라면 루트노드를 찾을 때까지 재귀적으로 호출
-		if(x == parent[x]) {
+	private static int findRoot(int x) {
+		// 기저조건 : x가 루트 조상인 경우 x 리턴
+		if (x == root[x]) {
 			return x;
+		// x 가 루트 조상이 아닌경우 root[x]가 루트조상이 될 때까지 재귀
+		} else {
+			root[x] = findRoot(root[x]);
+			return root[x];
 		}
-		parent[x] = findParent(parent[x]);
-		return parent[x]; 
+
 	}
+
+	private static void Union(int a, int b) {
+		a = findRoot(a);
+		b = findRoot(b);
+
+		if (a < b) { // b의 조상이 더 크면
+			root[b] = a; // b의 조상에 작은 값을 씌움
+		} else { // a의 조상이 더 크면
+			root[a] = b; // a의 조상에 작은 값을 씌움
+		}
+
+	}
+
 }
