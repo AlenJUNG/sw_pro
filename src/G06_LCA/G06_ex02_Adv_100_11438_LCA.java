@@ -100,7 +100,8 @@ public class G06_ex02_Adv_100_11438_LCA {
 		}
 		// A-2 : 먼저 깊이가 동일하도록 설정
 		for (int i = MAX_D; i >= 0; i--) {
-			if (depth[b] - depth[a] >= Math.pow(2, i)) {
+//			if (depth[b] - depth[a] >= Math.pow(2, i)) {
+			if(depth[b] - depth[a] >= (1 << i)) {	// 시간 복잡도 줄이기
 				b = parent[i][b];
 			}
 		}
