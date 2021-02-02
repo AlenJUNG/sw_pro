@@ -17,14 +17,12 @@ public class G05_ex03_사전A0031_자율주행테스트 {
 		public int compareTo(Node other) {
 			if (this.cost < other.cost) {
 				return -1;
-			} else if (this.cost == other.cost) {
-				return this.from - other.from;
 			}
 			return 1;
 		}
 	}
 
-	static int TC, N, M, ans, start, end;
+	static int TC, N, M, ans, start, end, min, max;
 	static ArrayList<Node> graph;
 	static int parent[];
 
@@ -62,10 +60,10 @@ public class G05_ex03_사전A0031_자율주행테스트 {
 			st = new StringTokenizer(br.readLine());
 			start = Integer.parseInt(st.nextToken());
 			end = Integer.parseInt(st.nextToken());
-
-			ans = 1000000000; // > 문제 확인 : 가능한 최대 - 최소 + 1 값
-			int min = 0;
-			int max = 0;
+				  
+			ans = 999999999; // > 문제 확인 : 가능한 최대 - 최소 + 1 값
+			min = 0;
+			max = 0;
 
 			// 02. 기준점 > ALL 확인
 			for (Node g : graph) {
