@@ -10,8 +10,9 @@ public class B01_유클리드 {
 	public static void main(String[] args) throws IOException {
 		System.setIn(new FileInputStream("src/B01_유클리드/B01_유클리드.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int TC = Integer.parseInt(br.readLine());
 		StringTokenizer st = new StringTokenizer(br.readLine());
-
+		
 		// 2개 숫자의 최대공약수 구하기
 		int a = Integer.parseInt(st.nextToken());
 		int b = Integer.parseInt(st.nextToken());
