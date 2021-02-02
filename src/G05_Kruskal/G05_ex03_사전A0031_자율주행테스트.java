@@ -25,7 +25,7 @@ public class G05_ex03_사전A0031_자율주행테스트 {
 	}
 
 	static int TC, N, M, ans, start, end;
-	static ArrayList<Node> graph, temp;
+	static ArrayList<Node> graph;
 	static int parent[];
 
 	public static void main(String[] args) throws IOException {
@@ -42,8 +42,7 @@ public class G05_ex03_사전A0031_자율주행테스트 {
 			M = Integer.parseInt(st.nextToken());
 
 			parent = new int[N + 1];
-			graph = new ArrayList<Node>();	// 기준 그래프
-			temp = new ArrayList<Node>();	// 비교할 temp 그래프
+			graph = new ArrayList<Node>();	// 그래프
 
 			int a, b, s;
 			for (int i = 1; i <= M; i++) {
@@ -55,15 +54,10 @@ public class G05_ex03_사전A0031_자율주행테스트 {
 
 				graph.add(new Node(a, b, s));	// 양방향 간선 입력
 				graph.add(new Node(b, a, s));
-
-				temp.add(new Node(a, b, s));
-				temp.add(new Node(b, a, s));
-
 			}
 			
 			// 01. 오름차순 정렬
 			Collections.sort(graph);
-			Collections.sort(temp);
 
 			st = new StringTokenizer(br.readLine());
 			start = Integer.parseInt(st.nextToken());
@@ -82,7 +76,7 @@ public class G05_ex03_사전A0031_자율주행테스트 {
 					parent[i] = i;
 				}
 
-				for (Node t : temp) {
+				for (Node t : graph) {
 					// 기준점보다 작은 값이 나오면 패스
 					if (t.cost < min) continue;
 					
