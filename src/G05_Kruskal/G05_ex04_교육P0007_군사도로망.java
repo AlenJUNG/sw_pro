@@ -33,7 +33,6 @@ public class G05_ex04_교육P0007_군사도로망 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
-//		bw.write(Math.pow(10, 6) + "\n");
 
 		TC = Integer.parseInt(br.readLine());
 
@@ -50,6 +49,7 @@ public class G05_ex04_교육P0007_군사도로망 {
 			}
 
 			pq = new PriorityQueue<>();
+			ans = 0;
 
 			int a, b, x;
 			for (int i = 1; i <= M; i++) {
