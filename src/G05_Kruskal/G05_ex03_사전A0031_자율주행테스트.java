@@ -17,14 +17,15 @@ public class G05_ex03_사전A0031_자율주행테스트 {
 		public int compareTo(Node other) {
 			if (this.cost < other.cost) {
 				return -1;
+			} else if (this.cost == other.cost) {
+				return this.from - other.from;
 			}
 			return 1;
 		}
-
 	}
 
 	static int TC, N, M, ans, start, end;
-	static PriorityQueue<Node> graph, temp;
+	static ArrayList<Node> graph, temp;
 	static int parent[];
 
 	public static void main(String[] args) throws IOException {
@@ -41,8 +42,8 @@ public class G05_ex03_사전A0031_자율주행테스트 {
 			M = Integer.parseInt(st.nextToken());
 
 			parent = new int[N + 1];
-			graph = new PriorityQueue<>();
-			temp = new PriorityQueue<>();
+			graph = new ArrayList<Node>();	// 기준 그래프
+			temp = new ArrayList<Node>();	// 비교할 temp 그래프
 
 			int a, b, s;
 			for (int i = 1; i <= M; i++) {
@@ -52,53 +53,53 @@ public class G05_ex03_사전A0031_자율주행테스트 {
 				b = Integer.parseInt(st.nextToken());
 				s = Integer.parseInt(st.nextToken());
 
-				graph.offer(new Node(a, b, s));
-				graph.offer(new Node(b, a, s));
+				graph.add(new Node(a, b, s));	// 양방향 간선 입력
+				graph.add(new Node(b, a, s));
 
-				temp.offer(new Node(a, b, s));
-				temp.offer(new Node(b, a, s));
+				temp.add(new Node(a, b, s));
+				temp.add(new Node(b, a, s));
 
 			}
+			
+			// 01. 오름차순 정렬
+			Collections.sort(graph);
+			Collections.sort(temp);
 
 			st = new StringTokenizer(br.readLine());
 			start = Integer.parseInt(st.nextToken());
 			end = Integer.parseInt(st.nextToken());
 
-			for (int i = 1; i <= N; i++) {
-				parent[i] = i;
-			}
-
-			ans = 1000000000; // 가능한 최대 - 최소 + 1 값
+			ans = 1000000000; // > 문제 확인 : 가능한 최대 - 최소 + 1 값
 			int min = 0;
 			int max = 0;
-			
-			while (!graph.isEmpty()) {
-				Node now = graph.poll();
-				min = now.cost;
 
+			// 02. 기준점 > ALL 확인
+			for (Node g : graph) {
+				min = g.cost;	// * 기준점 : 핵심코드
+				
+				// parent 정보 초기화
 				for (int i = 1; i <= N; i++) {
 					parent[i] = i;
 				}
 
-				while (!temp.isEmpty()) {
-					Node test = temp.poll();
-
-					if (test.cost < min) {
-						continue;
+				for (Node t : temp) {
+					// 기준점보다 작은 값이 나오면 패스
+					if (t.cost < min) continue;
+					
+					// 트리로 연결되어 있지 않은 간선은 연결
+					if (find(t.from) != find(t.to)) {
+						union(t.from, t.to);
 					}
-
-					if (find(test.from) == find(test.to)) {
-						continue;
-					} else {
-						union(test.from, test.to);
-					}
-
+					
+					// 문제 정답 찾기 > 찾으면 break;
+					// 연결이 된다면 == 조상이 같다면
 					if (find(start) == find(end)) {
-						max = test.cost;
-						ans = Math.min(ans, max - min);
+						max = t.cost;	// 오름차순 정렬이 되어 있으니 자동적으로 최대값 나옴
+						ans = Math.min(ans, max - min);	// 문제에서 원하는 최소값
 						break;
 					}
 				}
+
 			}
 
 			bw.write("#" + tc + " " + ans + "\n");
@@ -113,6 +114,10 @@ public class G05_ex03_사전A0031_자율주행테스트 {
 	private static void union(int a, int b) {
 		a = find(a);
 		b = find(b);
+
+//		if( a != b) {
+//			parent[b] = a;
+//		}
 
 		if (a > b) {
 			parent[a] = parent[b];
