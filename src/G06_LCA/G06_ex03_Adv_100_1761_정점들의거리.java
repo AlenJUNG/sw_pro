@@ -103,7 +103,8 @@ public class G06_ex03_Adv_100_1761_정점들의거리 {
 		}
 
 		for (int i = MAX_D; i >= 0; i--) {
-			if (depth[b] - depth[a] >= Math.pow(2, i)) {
+//			if (depth[b] - depth[a] >= Math.pow(2, i)) {
+			if (depth[b] - depth[a] >= (1 << i)) {
 				b = parent[i][b];
 			}
 		}
