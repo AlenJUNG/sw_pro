@@ -3,7 +3,7 @@ package B01_유클리드;
 import java.io.*;
 import java.util.*;
 
-// 최소공배수(LCM), 최대공약수(GDC) 구하기.
+// 최소공배수(LCM), 최대공약수(GDC) 구하기!
 public class B01_유클리드_hj {
 	static int TC;
 	static int arr[];
@@ -24,7 +24,7 @@ public class B01_유클리드_hj {
 
 			int a, b, aa;
 			a = Integer.parseInt(st.nextToken());
-			aa = a;
+			aa = a;S
 			while (st.hasMoreTokens()) {
 				b = Integer.parseInt(st.nextToken());
 				a = GDC(a, b);
