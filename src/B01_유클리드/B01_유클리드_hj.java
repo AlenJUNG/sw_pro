@@ -24,7 +24,7 @@ public class B01_유클리드_hj {
 
 			int a, b, aa;
 			a = Integer.parseInt(st.nextToken());
-			aa = a;S
+			aa = a;
 			while (st.hasMoreTokens()) {
 				b = Integer.parseInt(st.nextToken());
 				a = GDC(a, b);
