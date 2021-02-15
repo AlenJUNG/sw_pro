@@ -46,8 +46,8 @@ public class D04_ex03_P0084_알고리즘경진대회_중상 {
 				// pos = leaf start 지점
 				int pos = i + size - 1;
 				// leaf 1번째부터 값 입력
-				sumArray[pos] = floorArray[i][0];
-				gcdArray[pos] = floorArray[i][0];
+				sumArray[pos] = floorArray[i][0];	// 층별 직원 수 인덱스 트리
+				gcdArray[pos] = floorArray[i][0];	// 층별 직원 수 GDC 인덱스 트리
 			}
 
 			// Leaf에서 Top 까지 구간합 업데이트
@@ -75,16 +75,18 @@ public class D04_ex03_P0084_알고리즘경진대회_중상 {
 						totalTeams += 1;
 						continue;
 					}
-
+					// 층범위 start ~ end
 					int start = 0;
 					int end = 0;
-
+					
+					// 예외 케이스 1. > 지하로 갈 수는 없으니까
 					if (i - scope < 1) {
 						start = 1;
 					} else {
 						start = i - scope;
 					}
-
+					
+					// 예외 케이스 2. > 옥상으로 갈 수 는 없으니까
 					if (i + scope > N) {
 						end = N;
 					} else {
@@ -93,7 +95,8 @@ public class D04_ex03_P0084_알고리즘경진대회_중상 {
 
 					int finalGCD = getFinalGCD(start, end);
 					long totalPersons = getSum(start, end);
-
+					
+					// 총인원 / 최대공약수 > 몇 개의 팀으로 나누어지는가?
 					long tempTeams = (long) totalPersons / finalGCD;
 					totalTeams += tempTeams;
 
