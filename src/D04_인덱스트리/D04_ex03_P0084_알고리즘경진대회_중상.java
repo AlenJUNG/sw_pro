@@ -5,7 +5,7 @@ import java.util.*;
 
 public class D04_ex03_P0084_알고리즘경진대회_중상 {
 	static int TC, N; // N = S사 건물의 층 수
-	static int floorArray[][]; // [N][0] = 각 층에 근무하는 직원의 수, [N][1] = 각 층의 초대 가능층의 수
+	static int floorArray[][]; // [N][0] = 각 층에 근무하는 직원의 수, [N][1] = 각 층의 초대 가능층의 수 정리
 	static int gcdArray[];
 	static long sumArray[];
 	static long totalTeams;
