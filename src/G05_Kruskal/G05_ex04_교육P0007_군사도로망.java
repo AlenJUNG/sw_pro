@@ -36,7 +36,7 @@ public class G05_ex04_교육P0007_군사도로망 {
 	static PriorityQueue<Node> pq;
 
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/G05_Kruskal/G05_ex04_교육P0007_ 군사도로망.txt"));
+		System.setIn(new FileInputStream("src/G05_Kruskal/G05_ex04_교육P0007_군사도로망.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
@@ -82,9 +82,12 @@ public class G05_ex04_교육P0007_군사도로망 {
 
 			while (!pq.isEmpty()) {
 				Node node = pq.poll();
-
+				
+				// 조상이 같으면 도로를 잇지 않고 continue
 				if (find(node.to) == find(node.from)) {
 					continue;
+				// 조상이 다르면 ans에 도로 건설 값을 넣어준다 = MST
+				// ** 도로 제거 비용은 조상이 같다면 자동적으로 계산이 된다.
 				} else {
 					union(node.to, node.from);
 					ans += node.cost;
