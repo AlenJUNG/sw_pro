@@ -3,7 +3,7 @@ package G05_Kruskal;
 import java.io.*;
 import java.util.*;
 
-//N : 노드 수, M : 간선 수 > MST cost를 구하라
+// N : 노드 수, M : 간선 수 > MST cost를 구하라
 
 public class G05_Kruskal_usePQ {
 	static class Node implements Comparable<Node> {

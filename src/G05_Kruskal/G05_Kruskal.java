@@ -1,5 +1,7 @@
 package G05_Kruskal;
 
+// 문제 : N, M이 주어졌을 때 MST를 구하여라 > output : 159
+
 import java.util.*;
 import java.io.*;
 
@@ -25,7 +27,7 @@ public class G05_Kruskal {
 
 	static int N, M;	// 노드 수, 간선 수
 	static int root[];	// 조상, 최종 Union할 최고조상, root 배열
-	static ArrayList<Node> graph;	// 간선연결
+	static ArrayList<Node> graph;	// * 간선연결 그냥 1차원 Node면 가능함
 	static int ans;	// 답
 
 	public static void main(String[] args) throws IOException {
@@ -53,7 +55,7 @@ public class G05_Kruskal {
 			int t = Integer.parseInt(st.nextToken());
 			int c = Integer.parseInt(st.nextToken());
 
-			graph.add(new Node(f, t, c)); // 양방향 간선 확인
+			graph.add(new Node(f, t, c)); // ** 크루스칼은 양방향!임
 			graph.add(new Node(t, f, c));
 		}
 
