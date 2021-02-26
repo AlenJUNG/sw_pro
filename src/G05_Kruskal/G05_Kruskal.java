@@ -3,7 +3,7 @@ package G05_Kruskal;
 import java.util.*;
 import java.io.*;
 
-// * MST 구하는 기본 문제 > 반복할 것
+// * MST 구하는 기본 문제 > 반복
 public class G05_Kruskal {
 	static class Node implements Comparable<Node> {
 		int from, to, cost;
