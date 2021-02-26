@@ -28,18 +28,21 @@ public class O04_ex01_특정합연속수열개수 {
 		int end = 0; // * end를 초기값 0으로 맞춰준다
 
 		for (int start = 0; start < N; start++) {
-			// end 이동 조건 2개 동안 반복
+			// 1. end 이동 조건 2개 동안 반복
+			//    a) 구간의 합이 M보다 작고
+			//    b) end가 N보다 작을 때
 			while (intervalSum < M && end < N) {
 				intervalSum += arr[end];
 				end += 1;
 			}
-			// 부분합 찾으면 cnt 증가
+			// 2. 부분합 찾으면 cnt 증가
 			if (intervalSum == M) {
 				cnt += 1;
 			}
-			// start를 이동시키기 위해 초기값 제거
+			// 3. start를 이동시키기 위한 초기값 제거
 			intervalSum -= arr[start];
 		}
+		
 		System.out.println(cnt);
 	}
 }
