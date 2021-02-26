@@ -1,5 +1,12 @@
 package G05_Kruskal;
 
+/* Q) 도시의 수, 지금 존재하는 M개의 도로들과 각 도로를 제거하는 비용, 도로를 건설하는 것이 가능한 K개의 도시의 쌍과 
+ *    각 도로의 건설 비용을 받아서 위의 목적을 달성하는 비용의 최소값을 구하는 프로그램 작성
+ * Input) N, M, K
+ *        양 정점 제공 및 도로 제거 비용 (M개)
+ *        양 정점 제공 및 도로 건설 비용 (K개)
+ */
+
 import java.util.*;
 import java.io.*;
 
@@ -42,7 +49,8 @@ public class G05_ex04_교육P0007_군사도로망 {
 			N = Integer.parseInt(st.nextToken());
 			M = Integer.parseInt(st.nextToken());
 			K = Integer.parseInt(st.nextToken());
-
+			
+			// 1. 조상값 초기화
 			parent = new int[N + 1];
 			for (int i = 1; i <= N; i++) {
 				parent[i] = i;
@@ -59,7 +67,7 @@ public class G05_ex04_교육P0007_군사도로망 {
 				x = Integer.parseInt(st.nextToken());
 
 				pq.offer(new Node(a, b, -x));
-				ans += x; // 모든 도로 제거 시 총합 > key point
+				ans += x; 	// * 전체 도로 제거 가능 시, 총합 구하기 > key point
 			}
 
 			for (int i = 1; i <= K; i++) {
