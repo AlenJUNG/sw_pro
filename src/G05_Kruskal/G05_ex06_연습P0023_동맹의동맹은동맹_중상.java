@@ -1,6 +1,6 @@
 package G05_Kruskal;
 
-// 1로 시작하는 모든 질의에 대한 동맹 관계인 것들의 개수를 출력
+// 난이도 하 : 1로 시작하는 모든 질의에 대한 동맹 관계인 것들의 개수를 출력
 
 import java.util.*;
 import java.io.*;

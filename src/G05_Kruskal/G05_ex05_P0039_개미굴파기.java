@@ -1,4 +1,7 @@
 package G05_Kruskal;
+
+// 210227 어려움, 현재 못 풀었음
+
 import java.io.*;
 import java.util.*;
 
