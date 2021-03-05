@@ -64,7 +64,8 @@ public class G05_ex12_100_2887_행성터널 {
 		}
 
 		al = new ArrayList<Node>();
-
+		
+		// x 좌표 오름차순 정렬 : point 배열에 대하여 0부터 N - 1 까지임을 주의할 것
 		Arrays.sort(point, 0, N, new Comparator<Point>() {
 
 			@Override
@@ -81,6 +82,7 @@ public class G05_ex12_100_2887_행성터널 {
 			al.add(new Node(point[i].num, point[i + 1].num, cost));
 		}
 
+		// y 좌표 오름차순 정렬
 		Arrays.sort(point, 0, N, new Comparator<Point>() {
 
 			@Override
@@ -96,7 +98,8 @@ public class G05_ex12_100_2887_행성터널 {
 			int cost = Math.abs(point[i].y - point[i + 1].y);
 			al.add(new Node(point[i].num, point[i + 1].num, cost));
 		}
-
+		
+		// z 좌표 오름차순 정렬
 		Arrays.sort(point, 0, N, new Comparator<Point>() {
 
 			@Override
@@ -112,7 +115,8 @@ public class G05_ex12_100_2887_행성터널 {
 			int cost = Math.abs(point[i].z - point[i + 1].z);
 			al.add(new Node(point[i].num, point[i + 1].num, cost));
 		}
-
+		
+		// 최종 정렬
 		Collections.sort(al);
 
 		// 부모 초기화
@@ -120,7 +124,8 @@ public class G05_ex12_100_2887_행성터널 {
 		for (int i = 1; i <= N; i++) {
 			parent[i] = i;
 		}
-
+		
+		// 정답 구하기
 		ans = 0;
 		for (int i = 0; i < al.size(); i++) {
 			Node now = al.get(i);
