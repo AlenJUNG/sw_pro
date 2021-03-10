@@ -71,11 +71,11 @@ public class Main {
 			}
 
 			if (bellmanFord(0)) {
-				bw.write("BUG" + "\n");
+				bw.write("#"+tc+" "+"BUG" + "\n");
 			} else if (cost[V - 1] > 100_000_000_000L) {
-				bw.write("NO" + "\n");
+				bw.write("#"+tc+" "+"NO" + "\n");
 			} else {
-				bw.write(cost[V - 1] + " " + angel[V - 1] + "\n");
+				bw.write("#"+tc+" "+cost[V - 1] + " " + angel[V - 1] + "\n");
 			}
 
 			// bw.write(cost[V-1]+"\n");
