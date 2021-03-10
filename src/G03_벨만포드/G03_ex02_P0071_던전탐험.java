@@ -120,5 +120,7 @@ public class G03_ex02_P0071_´øÀüÅ½Çè {
 		}else {
 			System.out.println(cost[V - 1] + " " + angel[V - 1]);
 		}		
+		
+		
 	}
 }

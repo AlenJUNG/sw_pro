@@ -3,112 +3,141 @@ package G03_벨만포드;
 import java.util.*;
 import java.io.*;
 
-class City {
-    int end;
-    int weight;
- 
-    City(int end, int weight) {
-        this.end = end;
-        this.weight = weight;
-    }
-}
- 
 public class Main {
-    static int N, M;
-    static ArrayList<ArrayList<City>> a;
-    static long[] dist; // 자료형을 int로 할 경우 오버플로우 발생함.
-    static final int INF = 987654321;
- 
-    public static void main(String[] args) throws NumberFormatException, IOException {
-    	System.setIn(new FileInputStream("src/G03_벨만포드/G03_ex01_100_11657_타임머신.txt"));
-    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st = new StringTokenizer(br.readLine());
- 
-        N = Integer.parseInt(st.nextToken()); // 도시의 개수
-        M = Integer.parseInt(st.nextToken()); // 버스 노선의 개수
- 
-        a = new ArrayList<>(); // 인접 리스트
-        dist = new long[N + 1]; // 최단거리 배열
- 
-        for (int i = 0; i <= N; i++) {
-            a.add(new ArrayList<>());
-            dist[i] = INF;
-        }
- 
-        // 단방향 인접리스트 구현
-        for (int i = 0; i < M; i++) {
-            st = new StringTokenizer(br.readLine());
-            int A = Integer.parseInt(st.nextToken());
-            int B = Integer.parseInt(st.nextToken());
-            int C = Integer.parseInt(st.nextToken());
- 
-            a.get(A).add(new City(B, C));
-        }
- 
-        StringBuilder sb = new StringBuilder();
-        if (bellmanFord()) {
-            sb.append("-1\n");
-        } else {
-            for (int i = 2; i <= N; i++) {
-                if (dist[i] == INF) {
-                    sb.append("-1\n");
-                } else {
-                    sb.append(dist[i] + "\n");
-                }
-            }
-        }
- 
-        bw.write(sb.toString());
-        bw.flush();
-        bw.close();
-        br.close();
-    }
- 
-    public static boolean bellmanFord() {
-        dist[1] = 0; // 시작점은 0으로 초기화.
-        boolean update = false;
- 
-        // (정점의 개수 - 1)번 동안 최단거리 초기화 작업을 반복함.
-        for (int i = 1; i < N; i++) {
-            update = false;
- 
-            // 최단거리 초기화.
-            for (int j = 1; j <= N; j++) {
-                for (City city : a.get(j)) {
-                    if (dist[j] == INF) {
-                        break;
-                    }
- 
-                    if (dist[city.end] > dist[j] + city.weight) {
-                        dist[city.end] = dist[j] + city.weight;
-                        update = true;
-                    }
-                }
-            }
- 
-            // 더 이상 최단거리 초기화가 일어나지 않았을 경우 반복문을 종료.
-            if (!update) {
-                break;
-            }
-        }
- 
-        // (정점의 개수 - 1)번까지 계속 업데이트가 발생했을 경우
-        // (정점의 개수)번도 업데이트 발생하면 음수 사이클이 일어난 것을 의미함.
-        if (update) {
-            for (int i = 1; i <= N; i++) {
-                for (City city : a.get(i)) {
-                    if (dist[i] == INF) {
-                        break;
-                    }
- 
-                    if (dist[city.end] > dist[i] + city.weight) {
-                        return true;
-                    }
-                }
-            }
-        }
- 
-        return false;
-    } 
+	static int TC, V, E, A;
+	// INF를 LongMax로 설정하면 터짐, 틀리게끔 문제 나옴
+	// 길의 개수 E 3000 개 x 피로도 수치 1000000 x 10 으로 설정함
+	static long INF = 300000000001L;
+	static ArrayList<ArrayList<Node>> graph;
+	// 최대 피로도 E 3000 개 x 피로도 수치 1000000 > long type 설정
+	static long cost[];
+	static int angel[];
+
+	static class Node {
+		int idx, cost;
+
+		public Node(int idx, int cost) {
+			this.idx = idx; // to
+			this.cost = cost; // cost
+		}
+	}
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		System.setIn(new FileInputStream("src/G03_벨만포드/G03_ex02_P0071_던전탐험.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
+		TC = Integer.parseInt(br.readLine());
+
+		for (int tc = 1; tc <= TC; tc++) {
+
+			st = new StringTokenizer(br.readLine());
+
+			V = Integer.parseInt(st.nextToken()); // 노드
+			E = Integer.parseInt(st.nextToken()); // 간선
+			A = Integer.parseInt(st.nextToken()); // 천사
+
+			cost = new long[V + 1];
+			angel = new int[V + 1];
+			graph = new ArrayList<ArrayList<Node>>();
+
+			// 최단거리 초기화 : 시작정점 0, 도착정점 V - 1
+			for (int i = 0; i <= V; i++) {
+				cost[i] = INF; // 기본 템플릿
+				angel[i] = 0; // 이 문제 고유조건
+				graph.add(new ArrayList<Node>());
+			}
+
+			// 양방향 인접리스트 구현
+			int f, t, d;
+			for (int i = 1; i <= E; i++) {
+				st = new StringTokenizer(br.readLine());
+				f = Integer.parseInt(st.nextToken());
+				t = Integer.parseInt(st.nextToken());
+				d = Integer.parseInt(st.nextToken());
+
+				graph.get(f).add(new Node(t, d));
+				graph.get(t).add(new Node(f, d));
+			}
+
+			// 단방향 angel graph 리스트 정보 입력 > 고유 조건
+			for (int i = 1; i <= A; i++) {
+				st = new StringTokenizer(br.readLine());
+				f = Integer.parseInt(st.nextToken());
+				t = Integer.parseInt(st.nextToken());
+				d = Integer.parseInt(st.nextToken());
+
+				graph.get(f).add(new Node(t, -d));
+			}
+
+			if (bellmanFord(0)) {
+				bw.write("BUG" + "\n");
+			} else if (cost[V - 1] > 100_000_000_000L) {
+				bw.write("NO" + "\n");
+			} else {
+				bw.write(cost[V - 1] + " " + angel[V - 1] + "\n");
+			}
+
+			// bw.write(cost[V-1]+"\n");
+		}
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+
+	// loop 있다면 true
+	public static boolean bellmanFord(int start) {
+		cost[0] = 0;
+		boolean check_loop = false;
+
+		for (int i = 1; i <= V - 1; i++) {
+			check_loop = false; // 시작할 때 false로 시작
+
+			// 정점 1부터 N까지 인접리스트 완전탐색
+			for (int now = 0; now <= V - 1; now++) {
+				for (Node next : graph.get(now)) {
+					if (cost[now] == INF) {
+						break;
+					}
+					if (cost[next.idx] > cost[now] + next.cost) {
+						cost[next.idx] = cost[now] + next.cost;
+						if (next.cost < 0) { // cost가 음수이면 angel 업데이트
+							angel[next.idx] = angel[now] + 1;
+						} else {
+							angel[next.idx] = angel[now];
+						}
+						check_loop = true;
+
+					} else if (cost[next.idx] == cost[now] + next.cost) {
+						if (next.cost < 0) {
+							angel[next.idx] = Math.min(angel[next.idx], angel[now] + 1);
+						} else {
+							angel[next.idx] = Math.min(angel[next.idx], angel[now]);
+						}
+					}
+				}
+			}
+
+			// 더 이상 최단거리 초기화가 일어나지 않으면 바로 최단거리 초기화 작업 종료
+			if (!check_loop) {
+				break;
+			}
+		}
+
+		if (check_loop) {
+			for (int now = 0; now <= V - 1; now++) {
+				for (Node next : graph.get(now)) {
+					if (cost[now] == INF) {
+						break;
+					}
+					if (cost[next.idx] > cost[now] + next.cost) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+
+	}
 }

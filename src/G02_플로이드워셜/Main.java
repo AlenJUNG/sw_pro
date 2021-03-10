@@ -4,7 +4,8 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static final int INF = 101;
+	static final int INF = 10001;
+	static int d[];
 	static int graph[][];
 	static int N, M, X, K;
 	
@@ -15,13 +16,13 @@ public class Main {
 		StringTokenizer st;
 		
 		st = new StringTokenizer(br.readLine());
-		
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		
+		d = new int[N + 1];
 		graph = new int[N + 1][N + 1];
 		
-		for(int i = 1; i <= N; i++) {
+		for(int i = 1 ; i <= N; i ++) {
 			for(int j = 1; j <= N; j++) {
 				if(i == j) {
 					graph[i][j] = 0;
@@ -32,11 +33,14 @@ public class Main {
 		}
 		
 		int f, t;
-		for(int i = 1; i <= M; i++) {
+		for(int i = 1 ; i <= M; i ++) {
 			st = new StringTokenizer(br.readLine());
 			f = Integer.parseInt(st.nextToken());
 			t = Integer.parseInt(st.nextToken());
-			graph[f][t] = graph[t][f] = 1;
+				
+			graph[f][t] = 1;
+			graph[t][f] = 1;
+		
 		}
 		
 		for(int mid = 1; mid <= N; mid++) {
@@ -47,18 +51,13 @@ public class Main {
 			}
 		}
 		
-		for(int i = 1; i <= N; i++) {
-			for(int j = 1; j <= N; j++) {
-				bw.write(graph[i][j]+ " ");
-			}
-			bw.newLine();
-		}
-		
 		st = new StringTokenizer(br.readLine());
 		X = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
 		
-		bw.write(graph[1][X] + graph[X][K]+"\n");
+		long ans = graph[1][K] + graph[K][X];
+		
+		bw.write(ans + "\n");
 		
 		br.close();
 		bw.flush();
