@@ -32,7 +32,7 @@ public class G05_ex10_100_10775_°øÇ× {
 			if (root == 0) {
 				break;
 			}			
-			union(root, root - 1);
+			union(root - 1, root);
 			ans += 1;
 		}
 
