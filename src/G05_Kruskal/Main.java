@@ -68,6 +68,10 @@ public class Main {
 			}
 		}
 		
+		for(Node now : al) {
+			
+		}
+		
 		bw.write(ans+"\n");
 
 		br.close();

@@ -15,9 +15,9 @@ public class D04_ex05_P0038_Å°ÄÇÀ¸¸é {
 		}
 	}
 	
-	static int T, N, Q, ans;
+	static int T, N, Q, size;
 	static Node arr[];
-	static int idx_Tree[];
+	static int idx_Tree[], ans[];
 	
 	
 	public static void main(String[] args) throws IOException{
@@ -32,6 +32,9 @@ public class D04_ex05_P0038_Å°ÄÇÀ¸¸é {
 			st = new StringTokenizer(br.readLine());
 			N = Integer.parseInt(st.nextToken());
 			Q = Integer.parseInt(st.nextToken());
+			
+			arr = new Node[N + Q];
+			ans = new int[N + Q];
 			
 			st = new StringTokenizer(br.readLine());
 			for(int i = 0; i <= N - 1; i++) {
@@ -48,7 +51,7 @@ public class D04_ex05_P0038_Å°ÄÇÀ¸¸é {
 				arr[i] = new Node(S, E, i, value, 1);
 			}
 			
-			System.out.println("O");
+//			System.out.println("O");
 			
 			Arrays.sort(arr, 0, N + Q, new Comparator<Node>() {
 
@@ -57,7 +60,7 @@ public class D04_ex05_P0038_Å°ÄÇÀ¸¸é {
 					if(o1.h > o2.h) {
 						return -1;
 					}else if(o1.h == o2.h) {
-						if(o2.t > o1.t) {
+						if(o1.t > o2.t) {
 							return -1;
 						}
 					}
@@ -65,8 +68,36 @@ public class D04_ex05_P0038_Å°ÄÇÀ¸¸é {
 				}
 			});
 			
-			System.out.println("O");
+//			System.out.println("O");
+			// ÀÎµ¦½º Æ®¸®ÀÇ »ý¼º/ÀÔ·Â/¾÷µ¥ÀÌÆ®
+			size = 1;
+			while(size < N) {
+				size *= 2;
+			}
 			
+			idx_Tree = new int[2*size];
+			
+			int type, X;
+			for(int i = 0; i <= N + Q - 1; i++) {
+				type = arr[i].t;
+				X = arr[i].h;
+				
+				// ÁúÀÇ¸é
+				if(type == 1) {
+					ans[arr[i].i] = getSum(arr[i].s, arr[i].e);
+					continue;
+				}else {
+					idx_Tree[size + arr[i].i] = 1;
+					update();
+				}				
+				
+			}
+			
+			bw.write("#"+tc+" ");
+			for(int i = N; i <= N + Q - 1; i++) {
+				bw.write(ans[i]+" ");
+			}
+			bw.newLine();
 			
 		}
 		
@@ -75,6 +106,36 @@ public class D04_ex05_P0038_Å°ÄÇÀ¸¸é {
 		br.close();
 		bw.flush();
 		bw.close();
+	}
+
+
+	private static int getSum(int a, int b) {
+		int res = 0;
+		int left = size + a;
+		int right = size + b;
+		
+		while(left <= right) {
+			if(left % 2 == 1) {
+				res += idx_Tree[left];
+				left++;
+			}
+			if(right % 2 == 0) {
+				res += idx_Tree[right];
+				right--;
+			}
+			left /= 2;
+			right /= 2;
+		}
+		
+		return res;
+	}
+
+
+	private static void update() {
+		for(int i = size - 1; i >= 1; i--) {
+			idx_Tree[i] = idx_Tree[2*i] + idx_Tree[2*i + 1];
+		}
+		
 	}
 
 }
