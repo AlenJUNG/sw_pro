@@ -4,15 +4,32 @@ import java.io.*;
 import java.util.*;
 
 public class D04_ex05_P0038_키컸으면 {
-	static class Node {
+	static class Node implements Comparator<Node> {
 		int s, e, i, h, t;
 
 		public Node(int s, int e, int i, int h, int t) {
+			super();
 			this.s = s;
 			this.e = e;
 			this.i = i;
 			this.h = h;
 			this.t = t;
+		}
+
+		public Node() {
+			super();
+		}
+
+		@Override
+		public int compare(Node o1, Node o2) {
+			if (o1.h > o2.h) {
+				return -1;
+			} else if (o1.h == o2.h) {
+				if (o1.t > o2.t) {
+					return -1;
+				}
+			}
+			return 1;
 		}
 	}
 
@@ -53,20 +70,7 @@ public class D04_ex05_P0038_키컸으면 {
 
 //			System.out.println("O");
 
-			Arrays.sort(arr, 0, N + Q, new Comparator<Node>() {
-
-				@Override
-				public int compare(Node o1, Node o2) {
-					if (o1.h > o2.h) {
-						return -1;
-					} else if (o1.h == o2.h) {
-						if (o1.t > o2.t) {
-							return -1;
-						}
-					}
-					return 1;
-				}
-			});
+			Arrays.sort(arr, 0, N+Q, new Node());
 
 //			System.out.println("O");
 			// 인덱스 트리의 생성/입력/업데이트
