@@ -65,7 +65,7 @@ public class G05_Kruskal {
 		ans = 0;
 		
 		// STEP04. 최적 간선, MST 구하기
-		for (int i = 0; i < graph.size(); i++) {
+		for (int i = 0; i < graph.size(); i++) {	// * graph size 확 
 			int from = graph.get(i).from;
 			int to = graph.get(i).to;
 			int cost = graph.get(i).cost;
