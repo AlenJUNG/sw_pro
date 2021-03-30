@@ -91,8 +91,9 @@ public class D04_ex05_P0038_Å°ÄÇÀ¸¸é {
 					ans[arr[i].i] = getSum(arr[i].s, arr[i].e);
 					continue;
 				} else {
-					idx_Tree[size + arr[i].i] = 1;
-					update();
+					int idx = size + arr[i].i;
+					idx_Tree[idx] = 1;
+					update(idx);
 				}
 
 			}
@@ -131,9 +132,11 @@ public class D04_ex05_P0038_Å°ÄÇÀ¸¸é {
 		return res;
 	}
 
-	private static void update() {
-		for (int i = size - 1; i >= 1; i--) {
-			idx_Tree[i] = idx_Tree[2 * i] + idx_Tree[2 * i + 1];
+	private static void update(int x) {
+		int idx = x / 2;
+		while(idx > 0) {
+			idx_Tree[idx] = idx_Tree[idx * 2] + idx_Tree[idx * 2 + 1];
+			idx /= 2;
 		}
 
 	}
