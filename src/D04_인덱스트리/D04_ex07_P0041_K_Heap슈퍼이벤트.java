@@ -10,7 +10,7 @@ package D04_인덱스트리;
 import java.io.*;
 import java.util.*;
 
-public class Solution {
+public class D04_ex07_P0041_K_Heap슈퍼이벤트 {
 	static int TC;
 	static int Q;
 	static int idx_Tree[];
@@ -18,7 +18,7 @@ public class Solution {
 	static int MAX_NO = 100000;	// 카드에 적힌 수는 1 이상 최대 100000 이하
 
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/D04_ex07_P0041_K_Heap슈퍼이벤트/input.txt"));
+		System.setIn(new FileInputStream("src/D04_인덱스트리/D04_ex07_P0041_K_Heap슈퍼이벤트.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
