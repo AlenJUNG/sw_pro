@@ -6,7 +6,7 @@ public class Main {
 		double pie = 3.14159265358979;
 		double money = 4424.243423;
 		
-		System.out.println(String.format(""%.3f", pie));
+		System.out.println(String.format("%.3f", pie));
 
 	}
 

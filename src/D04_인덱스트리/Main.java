@@ -12,7 +12,7 @@ import java.io.*;
  * c(b ≤ c ≤ N)번째 수까지의 합을 구하여 출력하면 된다.
  */
 
-public class D04_ex00_100_2042_구간합_중 {
+public class Main {
 	static int N, M, K, size;
 	static long ans;
 	static int MAX_N = 1000000;
