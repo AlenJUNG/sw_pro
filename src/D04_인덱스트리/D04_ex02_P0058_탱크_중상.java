@@ -74,7 +74,6 @@ public class D04_ex02_P0058_ÅÊÅ©_Áß»ó {
 				while (idx > 0) {
 					indexTree[idx] += (long) tArr[i].s;
 					idx /= 2;
-// ÇÊ
 				}
 
 				res = 0L;
