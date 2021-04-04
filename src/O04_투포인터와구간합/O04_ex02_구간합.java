@@ -3,6 +3,8 @@ package O04_투포인터와구간합;
 import java.util.*;
 import java.io.*;
 
+// Q) 3번째 수부터 4번째 수까지의 합을 구하려면 어떻게 해야할까?
+
 // 접두사 합(Prefix Sum) 알고리즘
 // 미리 배열에 저장해놓고 나중에 뽑아쓴다. > right - (left - 1)
 
