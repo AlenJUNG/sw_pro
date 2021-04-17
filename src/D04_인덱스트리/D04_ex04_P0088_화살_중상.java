@@ -1,138 +1,143 @@
-package D04_ÀÎµ¦½ºÆ®¸®;
-
-// N, H, P
+package D04_ì¸ë±ìŠ¤íŠ¸ë¦¬;
 
 import java.io.*;
 import java.util.*;
 
-public class D04_ex04_P0088_È­»ì_Áß»ó {
-
+public class D04_ex04_P0088_í™”ì‚´_ì¤‘ìƒ {
 	static class Building {
-		int h, p, idx;
+		int h, pow, idx;
 
-		Building(int h, int p, int idx) {
+		Building(int h, int pow, int idx) {
 			this.h = h;
-			this.p = p;
+			this.pow = pow;
 			this.idx = idx;
 		}
 	}
 
-	static int T, N, S, now, k;
+	static int TC, N, size, now, k;
 	static long ans;
-	static int tree[];
+	static int[] tree;
 	static Building building[];
 
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/D04_ÀÎµ¦½ºÆ®¸®/D04_ex04_P0088_È­»ì_Áß»ó.txt"));
+		System.setIn(new FileInputStream("src/D04_ex04_P0088_í™”ì‚´_ì¤‘ìƒ/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
-		T = Integer.parseInt(br.readLine());
 
-		for (int tc = 1; tc <= T; tc++) {
+		TC = Integer.parseInt(br.readLine());
 
+		for (int tc = 1; tc <= TC; tc++) {
 			N = Integer.parseInt(br.readLine());
 
+			// * ë°°ì—´ì˜ í¬ê¸°ëŠ” N + 1ë¡œ ì„¤ì •í•˜ê³  1ë¶€í„° Nê¹Œì§€ ì…ë ¥í•˜ì—¬ ì—°ì‚°
 			building = new Building[N + 1];
+
 			st = new StringTokenizer(br.readLine());
+			// 0. ë°ì´í„° ì…ë ¥
 			for (int i = 1; i <= N; i++) {
-				building[i] = new Building(0, 0, 0); // »ı·« °¡´É?
+				// ì¤‘ìš” : ì–´ë– í•œ ë°ì´í„° ê°’ì´ë¼ë„ ë“¤ì–´ê°€ ìˆì–´ì•¼ í•¨
+				building[i] = new Building(0, 0, 0);
 				building[i].h = Integer.parseInt(st.nextToken());
 			}
 
 			st = new StringTokenizer(br.readLine());
 			for (int i = 1; i <= N; i++) {
-				building[i].p = Integer.parseInt(st.nextToken());
+				building[i].pow = Integer.parseInt(st.nextToken());
 				building[i].idx = i;
 			}
 
-			// 1. ºôµù ³ôÀÌ¼ø ³»¸²Â÷¼ø Á¤·Ä (Å©±â°¡ °°Àº °æ¿ì ¸ÕÀú ÀÔ·ÂµÈ ¼ø¼­)
+			// 1. ë¹Œë”©ë†’ì´ìˆœìœ¼ë¡œ ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬(* í¬ê¸°ê°€ ê°™ì€ ê²½ìš° ë¨¼ì € ì…ë ¥ëœ ìˆœì„œ)
 			Arrays.sort(building, 1, N + 1, new Comparator<Building>() {
-
 				@Override
-				public int compare(Building o1, Building o2) {
-					if (o1.h == o1.h) {
-						return o1.idx - o2.idx;
+				public int compare(Building a, Building b) {
+					if (a.h == b.h) {
+						return a.idx - b.idx;
 					} else {
-						return o2.h - o1.h;
+						return b.h - a.h;
 					}
 				}
 			});
 
-			// 2. ÀÎµ¦½ºÆ®¸® »ı¼º
-			S = 1;
-			while (S < N) {
-				S *= 2;
+			// 2. ì¸ë±ìŠ¤íŠ¸ë¦¬ ìƒì„±
+			size = 1;
+			while (size < N) {
+				size *= 2;
 			}
-
-			tree = new int[2 * S];
+			tree = new int[size * 2];
 
 			ans = 0;
-
 			for (int i = 1; i <= N; i++) {
-				// 3.1. º»ÀÎº¸´Ù ÀÎµ¦½ºÆ®¸® »ó ¿ŞÂÊ ºôµùÀÇ ¼ö + Èû + 1
-				now = sum(1, building[i].idx - 1) + building[i].p + 1;
-
+				// 3.1 ë³¸ì¸ë³´ë‹¤ ì¸ë±ìŠ¤íŠ¸ë¦¬ ìƒ ì™¼ìª½ ë¹Œë”© ìˆ˜ + í˜ + 1
+				now = sum(1, building[i].idx - 1) + building[i].pow + 1;
+				// 3.2 íƒ€ì¼“ë¹Œë”©ì´ ìˆëŠ” ê²½ìš° ë†’ì´ ì¶œë ¥
+				// * kê°€ Në³´ë‹¤ í¬ë‹¤ë©´ ê°’ì„ ë”í•˜ì§€ ì•ŠëŠ”ë‹¤ > ê°’ì— ë§ëŠ” ë¹Œë”©ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŒ
 				k = find(now);
 				if (k <= N) {
 					ans += k;
 				}
-
+				// 3.3 ë³¸ì¸ìœ„ì¹˜ ì¸ë±ìŠ¤íŠ¸ë¦¬ ê°±ì‹ 
 				update(building[i].idx, 1);
-
 			}
+
 			bw.write("#" + tc + " " + ans + "\n");
+
 		}
 
 		br.close();
 		bw.flush();
 		bw.close();
-	}
 
-	private static void update(int ind, int val) {
-		ind = S + ind - 1;
-		while (ind > 0) {
-			tree[ind] += val;
-			ind /= 2;
-		}
 	}
 
 	private static int find(int target) {
-		int i = 1;
-		int l, r;
+		int node = 1;
 
-		if (tree[i] < target) {
+		// ì¡°ê±´ ì¤‘ìš”
+		if (tree[node] < target) {
 			return 0;
 		}
 
-		while (i < S) {
-			l = i * 2;
-			r = i * 2 + 1;
-			if (tree[l] < target) {
-				target -= tree[l];
-				i = r;
+		while (node < size) {
+			int child_node = node * 2;
+			if (target > tree[child_node]) {
+				target = target - tree[child_node];
+				node = child_node + 1;
 			} else {
-				i = l;
+				node = child_node;
 			}
 		}
-		return i - S + 1;
+		return node - size + 1;
+	}
+
+	private static void update(int idx, int val) {
+		idx = size + idx - 1;
+
+		while (idx > 0) {
+			tree[idx] += val;
+			idx /= 2;
+		}
 	}
 
 	private static int sum(int s, int e) {
 		int sum = 0;
-		s = S + s - 1;
-		e = S + e - 1;
+		s = size + s - 1;
+		e = size + e - 1;
+
 		while (s <= e) {
 			if (s % 2 == 1) {
 				sum += tree[s];
+				s++;
 			}
-			if (s % 2 == 0) {
+			if (e % 2 == 0) {
 				sum += tree[e];
+				e--;
 			}
-			s = (s + 1) / 2;
-			e = (e + 1) / 2;
+			s /= 2;
+			e /= 2;
 		}
 		return sum;
 	}
 
 }
+
