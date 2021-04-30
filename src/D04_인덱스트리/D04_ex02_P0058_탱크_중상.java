@@ -1,26 +1,4 @@
 package D04_인덱스트리;
-// 디버깅 해야함 값이 안 맞음
-
-import java.util.*;
-import java.io.*;
-
-<<<<<<< HEAD
-public class D04_ex02_P0058_탱크_중상 {
-	static class Tank {
-		int x, y, s;
-=======
-import java.io.*;
-import java.util.*;
->>>>>>> branch 'master' of https://github.com/shadyhj/sw_pro.git
-
-<<<<<<< HEAD
-		public Tank(int x, int y, int s) {
-			this.x = x;
-			this.y = y;
-			this.s = s;
-		}
-	}
-=======
 public class D04_ex02_P0058_탱크_중상 {
 	static class Tank {
 		int x, y, s;
