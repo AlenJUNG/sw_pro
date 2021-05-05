@@ -1,194 +1,87 @@
-package D04_ÀÎµ¦½ºÆ®¸®;
-public class D04_ex02_P0058_ÅÊÅ©_Áß»ó {
-	static class Tank {
-		int x, y, s;
+package D04_ì¸ë±ìŠ¤íŠ¸ë¦¬;
 
-		public Tank(int x, int y, int s) {
+import java.util.*;
+import java.io.*;
+
+public class Solution {
+	static class Tank {
+		int id, x, y, score;
+
+		public Tank(int id, int x, int y, int score) {
+			this.id = id;
 			this.x = x;
 			this.y = y;
-			this.s = s;
+			this.score = score;
 		}
 	}
-
-	static Tank tArr[];
-	static int yArr[], yIdx[];
-	static long idxTree[], ans;	// ¹®Á¦¿¡¼­ 4 byte°¡ ³Ñ¾î°¥ ¼ö ÀÖ´Ù°í ÇßÀ¸´Ï longÀ¸·Î ¼±¾ğ
-	static int TC, N, a, b, c;
+	static int TC, N, size;
+	static Tank tank[];
+	static long ans;
+	static long tree[];
 
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/D04_ÀÎµ¦½ºÆ®¸®/D04_ex02_P0058_ÅÊÅ©_Áß»ó.txt"));
+		System.setIn(new FileInputStream("src/D04_ex02_P0058_íƒ±í¬_ì¤‘ìƒ/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st;
+		StringTokenizer st = null;
 
 		TC = Integer.parseInt(br.readLine().trim());
 
 		for (int tc = 1; tc <= TC; tc++) {
-
 			N = Integer.parseInt(br.readLine().trim());
-
-			tArr = new Tank[N + 1];
-			yArr = new int[N + 1];
-			yIdx = new int[N + 1];
-
-			for (int i = 0; i < N; i++) {
+			
+			tank = new Tank[N + 1];
+			for (int i = 1; i <= N; i++) {
 				st = new StringTokenizer(br.readLine().trim());
-				a = Integer.parseInt(st.nextToken());
-				b = Integer.parseInt(st.nextToken());
-				c = Integer.parseInt(st.nextToken());
+				int a = Integer.parseInt(st.nextToken());
+				int b = Integer.parseInt(st.nextToken());
+				int x = Integer.parseInt(st.nextToken());
 
-				tArr[i] = new Tank(a, b, c);
-				yArr[i] = b;
+				tank[i] = new Tank(i, a, b, x);
 			}
 
-			// ³»¸²Â÷¼ø Á¤·Ä : 0 ~ N - 1 ±¸°£ ÁÖÀÇ
-			Arrays.sort(tArr, 0, N, new Comparator<Tank>() {
+			// * yê°’ì´ ì—°ì†ì´ì§€ ì•Šì•„ë„ = ë“¬ì„±ë“¬ì„± ì¦ê°€í•´ë„ ìˆœì„œëŠ” ì—°ì†ì´ì–´ì•¼í•¨
+			// y ì˜¤ë¦„ì°¨ìˆœ
+			Arrays.sort(tank, 1, N + 1, new Comparator<Tank>() {
+				@Override
+				public int compare(Tank o1, Tank o2) {
+					return o1.y - o2.y;
+				}
+			});
 
+			// y ì˜¤ë¦„ì°¨ìˆœ ê¸°ì¤€ ë¦¬ë¼ë²¨ë§
+			for (int i = 1; i <= N; i++) {
+				tank[i].id = i;
+			}
+			
+			// x ë‚´ë¦¼ì°¨ìˆœ
+			Arrays.sort(tank, 1, N + 1, new Comparator<Tank>() {
 				@Override
 				public int compare(Tank o1, Tank o2) {
 					return o2.x - o1.x;
 				}
 			});
-
-			// ¿À¸§Â÷¼ø Á¤·Ä : 0 ~ N - 1 ±¸°£ ÁÖÀÇ
-			Arrays.sort(yArr, 0, N);
 			
-			// * Áß¿ä : 100¸¸ÀÇ Á¤º¸¸¦ 10¸¸ÀÇ Á¤º¸·Î ÁÙ¿© °è»êÇÏ±â À§ÇØ ÁÂÇ¥°ª ´Ù½Ã ÀçÁöÁ¤
-			for (int i = 0; i < N; i++) {
-				yIdx[yArr[i]] = i; // yArr[i]ÀÌ ¸î ¹øÂ° À§Ä¡ÀÎÁö ¼ø¼­´ë·Î ÀúÀå > ¸î ¹øÂ° y°ªÀÎ°¡?
-			}
-			
-			// ÀÎµ¦½ºÆ®¸® »ı¼º > 1Â÷¿ø ¹è¿­·Î »ı¼º
-			int size = 1;
-			while (size < 100000) {
+			// Idx Tree ìƒì„±
+			size = 1;
+			while (size < N) {
 				size *= 2;
 			}
-			// * Why? ÃÖÁ¾ idxTree Å©±â°¡(size * 2) 262144 ÀÎ°¡? 
-			// 10¸¸ÀÇ Á¤º¸·Î ÁÙ¿´±â ¶§¹®¿¡ NÀ» 10¸¸À¸·Î º½ 
-			idxTree = new long[size * 2];
-			
-			int tempIdx, left, right;
-			long temp_ans;
+			tree = new long[size * 2];
+
 			ans = 0;
 			
-			// xÁÂÇ¥·Î ³»¸²Â÷¼øÇÑ ÅÊÅ© ¹è¿­¿¡¼­ ÅÊÅ©µéÀ» ÇÏ³ª¾¿ »©¸é¼­ Á¡¼ö °è»ê
-			// ÅÊÅ©ÀÇ ¼ö´Â N°³±îÁö ÀÖÀ¸´Ï ¹İº¹
-			for (int i = 0; i < N; i++) {
-				// Re¶óº§¸µ : ÅÊÅ© ¼ø¼­´ë·Î ³»¸²Â÷¼øÀ¸·Î º¯È¯µÈ yÁÂÇ¥¸¦ ÀÎµ¦½º·Î º¯È¯
-				tempIdx = yIdx[tArr[i].y] + size;
-				// ±¸°£ Ç¥Çö
-				left = tempIdx + 1;
-				right = N + size - 1;
-
-				// ³ëµå 1°³¸¦ Update ÇÔ
-				while (tempIdx > 0) {
-					idxTree[tempIdx] += (long) tArr[i].s;
-					tempIdx /= 2;
-				}
-
-				temp_ans = 0L;
-				while (left <= right) {
-					if (left % 2 == 1) {
-						temp_ans += idxTree[left];
-						left++;
-					}
-					if (right % 2 == 0) {
-						temp_ans += idxTree[right];
-						right--;
-					}
-
-					left /= 2;
-					right /= 2;
-				}
-				ans += temp_ans;
-			}
-
-			bw.write("#" + tc + " " + ans + "\n");
-		}
-
-		br.close();
-		bw.flush();
-		bw.close();
->>>>>>> branch 'master' of https://github.com/shadyhj/sw_pro.git
-
-	static Tank tArr[] = new Tank[100000];
-	static int yArr[] = new int[100000];
-	static int yIdx[] = new int[1000001]; // ÁÂÇ¥ ¼ø¼­°¡ ¸î¹øÂ°ÀÎÁö ÀúÀåÇÒ °ÅÀÓ
-	static long indexTree[] = new long[262144]; // ¹®Á¦¿¡¼­ 4 byte¸¦ ³Ñ¾î°¥ ¼ö ÀÖ´Ù°í ÇßÀ¸´Ï longÀ¸·Î ¼±¾ğ
-	// 10¸¸¿¡ Á¦ÀÏ°¡±î¿î 2ÀÇ Á¦°ö * 2 »çÀÌÁî·Î ¸¸µê
-	static int TC, N;
-
-	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/D04_ÀÎµ¦½ºÆ®¸®/D04_ex02_P0058_ÅÊÅ©_Áß»ó.txt"));
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st;
-
-		TC = Integer.parseInt(br.readLine().trim());
-
-		for (int tc = 1; tc <= TC; tc++) {
-			N = Integer.parseInt(br.readLine().trim());
-
-			int x, y, s;
-			for (int i = 0; i < N; i++) {
-				st = new StringTokenizer(br.readLine().trim());
-				x = Integer.parseInt(st.nextToken());
-				y = Integer.parseInt(st.nextToken());
-				s = Integer.parseInt(st.nextToken());
-
-				tArr[i] = new Tank(x, y, s);
-				yArr[i] = y;
-			}
-
-			Arrays.sort(tArr, 0, N, new Comparator<Tank>() {
-
-				@Override
-				public int compare(Tank o1, Tank o2) {
-					return o2.x - o1.x; // x ±âÁØ ³»¸²Â÷¼øÀ¸·Î Á¤·Ä
-				}
-			});
-
-			Arrays.sort(yArr, 0, N);
-			for (int i = 0; i < N; i++) {
-				yIdx[yArr[i]] = i;
-			}
-
-			int size = 1;
-			int idx, a, b;
-			long res;
-			int ans = 0;
-
-			while (size > N) {
-				size *= 2;
-			}
-
-			for (int i = 0; i < N; i++) {
-				idx = size + yIdx[tArr[i].y];
-				a = idx + 1;
-				b = N - 1 + size;
-
-				while (idx > 0) {
-					indexTree[idx] += (long) tArr[i].s;
-					idx /= 2;
-				}
-
-				res = 0L;
-
-				while (a <= b) {
-					if (a % 2 == 1) {
-						res += indexTree[a];
-						a++;
-					}
-					if (b % 2 == 0) {
-						res += indexTree[b];
-						b--;
-					}
-
-					a /= 2;
-					b /= 2;
-				}
-
-				ans += res;
+			// * ì¢Œí‘œì••ì¶• x ë‚´ë¦¼ì°¨ìˆœ ìˆœìœ¼ë¡œ ë½‘ìœ¼ë©´ì„œ yìˆœì„œëŒ€ë¡œ treeì— ì…ë ¥
+			for (int i = 1; i <= N; i++) {
+//				if (i == 1) {
+//					** ì£¼ì˜ tank ê°’ ì…ë ¥ í•„ìš” : ë°”ë¡œ continue í•˜ë©´ ì•ˆëŒ
+//					continue;
+//				}
+				
+				// 1. êµ¬ê°„í•© ì„ ansì— ë”í•˜ê³ 
+				ans += getSum(tank[i].id + 1, N);
+				// 2. tank ê°’ íŠ¸ë¦¬ì— ì…ë ¥ í›„ ì—…ë°ì´íŠ¸
+				upDate(tank[i].id, tank[i].score);
 			}
 
 			bw.write("#" + tc + " " + ans + "\n");
@@ -198,6 +91,38 @@ public class D04_ex02_P0058_ÅÊÅ©_Áß»ó {
 		br.close();
 		bw.flush();
 		bw.close();
+	}
+
+	private static void upDate(int id, int score) {
+		int idx = id + size - 1;
+		tree[idx] = score;
+		idx /= 2;
+
+		while (idx > 0) {
+			tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
+			idx /= 2;
+		}
+	}
+
+	private static long getSum(int a, int b) {
+		long res = 0;
+		int s = a + size - 1;
+		int e = b + size - 1;
+
+		while (s <= e) {
+			if (s % 2 == 1) {
+				res += tree[s];
+				s++;
+			}
+			if (e % 2 == 0) {
+				res += tree[e];
+				e--;
+			}
+			s /= 2;
+			e /= 2;
+		}
+
+		return res;
 	}
 
 }
