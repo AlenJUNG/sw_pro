@@ -54,12 +54,12 @@ public class B01_유클리드_hj {
 		}
 
 		int r = 0;
-		while (a != 0) {
+		while (a != 0) {	// a가 0이 아닐 때만 반복
 			if (b % a != 0) {
 				r = b % a;
 				b = a;
 				a = r;
-			} else {
+			} else {	// a가 0이면 0
 				return a;
 			}
 		}
