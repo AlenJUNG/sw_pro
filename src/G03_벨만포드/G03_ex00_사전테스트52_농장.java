@@ -1,3 +1,4 @@
+package G03_벨만포드;
 
 /* [사전 테스트 52 : 농장]
  * [문제정보]
@@ -18,7 +19,7 @@
 import java.io.*;
 import java.util.*;
 
-public class Solution {
+public class G03_ex00_사전테스트52_농장 {
 	static class Node {
 		int idx;
 		int distance;
@@ -43,7 +44,7 @@ public class Solution {
 	static long dis[];
 
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/pretest/input.txt"));
+		System.setIn(new FileInputStream("src/G03_벨만포드/G03_ex00_사전테스트52_농장.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
@@ -84,7 +85,7 @@ public class Solution {
 			Arrays.fill(dis, INF);
 
 			int check = 0;
-			// 음의 순환이 발생한 경우
+			// �쓬�쓽 �닚�솚�씠 諛쒖깮�븳 寃쎌슦
 			for (int i = 1; i <= N; i++) {
 				if (bellmanFord(i) == 1) {
 					check = 1;
