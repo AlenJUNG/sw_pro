@@ -21,23 +21,31 @@ public class PRJ_ex {
 	}
 
 	private static int binarySearch(int[] a, int s, int e, int target) {
+		// 일반 순서에 따른 배열 순서로 치환
+		// 경우에 따라서는 필요 없을 수 있음
 		int start = s - 1;
 		int end = e - 1;
-		
-		while(true) {
-			if(start > end) {
+
+		while (true) {
+			// 답이 없는 경우 -1 출력
+			if (start > end) {
 				return -1;
 			}
 			
-			int mid = (start + end) / 2;
+			// ** mid값 계산 (소수점이하는 자동으로 절삭)
+            // int mid = (start + end) / 2;	의 경우
+			// start + end 값이 int 최대값 초과시 overflow 나기 때문에
+			// ** 아래 code로 사전에 방지할 것
 			
-			if(a[mid] == target) {
+			int mid = start + ((end - start) / 2);
+
+			if (a[mid] == target) {
 				return mid;
-			}else if(a[mid] < target) {
+			} else if (a[mid] < target) {
+				start = mid + 1;
+			} else {
 				end = mid - 1;
-			}else {
-				start = start + 1;
-			}			
+			}
 		}
 	}
 
