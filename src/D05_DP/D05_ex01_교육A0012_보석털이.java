@@ -9,7 +9,7 @@ public class D05_ex01_교육A0012_보석털이 {
 	static long DP[][];
 
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/D05_ex01_교육A0012_보석털이/D05_ex01_교육A0012_보석털이.txt"));
+		System.setIn(new FileInputStream("src/D05_DP/D05_ex01_교육A0012_보석털이.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st = null;
