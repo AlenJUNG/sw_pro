@@ -25,7 +25,7 @@ public class PRJ_ex {
 		// 경우에 따라서는 필요 없을 수 있음
 		int start = s - 1;
 		int end = e - 1;
-
+a
 		while (true) {
 			// 답이 없는 경우 -1 출력
 			if (start > end) {
