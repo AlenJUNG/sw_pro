@@ -18,7 +18,7 @@ public class Main {
 	static long d[]; // 자료형을 int로 할 경우 오버플로우 발생
 	static int N, M;
 	static int start = 1;
-	static final int INF = 60000001; // M * cost 최대
+	static final int INF = 60000001; // M * cost + 1 최대
 
 	public static void main(String[] args) throws IOException {
 		System.setIn(new FileInputStream("src/G03_벨만포드/G03_ex01_100_11657_타임머신.txt"));
@@ -32,7 +32,7 @@ public class Main {
 		d = new long[N + 1];
 //		Arrays.fill(d, INF);
 
-		// 간선 리스트 생성 & d 배열 무한대 입력을 동시에 진행
+		// 간선 리스트 생성 & d 배열 무한대 입력을 동시진행
 		graph = new ArrayList<ArrayList<Node>>();
 		for (int i = 0; i <= N; i++) {
 			graph.add(new ArrayList<Node>());
@@ -77,7 +77,7 @@ public class Main {
 
 		// * (정점의 개수 - 1) 만큼 최단거리 초기화 작업 반복
 		for (int i = 1; i <= N - 1; i++) {
-			check_loop = false; // 시작할 때 false로 시작
+			check_loop = false; // 시작할 때마다 false로 시작
 
 			// 정점 1부터 N까지 인접리스트 완전탐색
 			for (int now = 1; now <= N; now++) {
