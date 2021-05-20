@@ -26,7 +26,7 @@ public class hj_test {
 			aa = a;
 			while (st.hasMoreTokens()) {
 				b = Integer.parseInt(st.nextToken());
-				a = GCD(a, b);
+				a = GCD1(a, b);
 				aa *= b;
 			}
 
@@ -41,6 +41,28 @@ public class hj_test {
 		bw.flush();
 		bw.close();
 
+	}
+	
+	private static int GCD1(int a, int b) {
+		if(a > b) {
+			int temp;
+			temp = a;
+			a = b;
+			b = temp;
+		}
+		
+		if(a == 0) {
+			return 0;
+		}
+		
+		while(true) {
+			if(b % a == 0) {
+				return a;
+			}
+			int r = b % a;
+			b = a;
+			a = r;
+		}
 	}
 
 	private static int GCD(int a, int b) {
