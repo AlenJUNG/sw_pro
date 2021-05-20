@@ -3,6 +3,7 @@ package O04_투포인터와구간합;
 import java.io.*;
 import java.util.*;
 
+// Update 2021.05.20
 // Q) 2번째에서 4번째까지 구간합 구하시오.
 
 public class hj_test_구간합 {
