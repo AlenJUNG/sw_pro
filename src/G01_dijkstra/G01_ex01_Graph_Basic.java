@@ -46,7 +46,8 @@ public class G01_ex01_Graph_Basic {
 			// 3. 각 배열은 시작점을 의미하고 해당 배열에 저장된 리스트는 도착점을 의미
 			graph[from].add(new Node(from, to, value));
 		}
-				
+		
+		System.out.println("Check");
 				
 	}
 
