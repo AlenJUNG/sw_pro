@@ -172,6 +172,7 @@ public class D04_ex03_P0084_알고리즘경진대회_중상 {
 			b = temp;
 
 		}
+		
 		int r = 0;
 
 		while (true) {
