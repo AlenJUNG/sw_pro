@@ -45,29 +45,39 @@ public class G07_위상정렬 {
 
 	// 위상정렬 함수
 	private static void topologySort() {
-		ArrayList<Integer> result = new ArrayList<>(); // 알고리즘 수행 결과를 담을 리스트
+		ArrayList<Integer> result = new ArrayList<>(); // 알고리즘 수행 결과를 담을 리스트 선언 및 생성
 		Queue<Integer> q = new LinkedList<>(); // 큐 라이브러리 사용
 
-		// 처음 시작할 때는 진입차수가 0인 노드를 큐에 삽입
+		// 1. 전체 Node 중 진입차수가 0인 노드를 큐에 삽입
 		for (int i = 1; i <= v; i++) {
 			if (indegree[i] == 0) {
 				q.offer(i);
 			}
 		}
 
-		// 큐가 빌 때까지 반복
+		// 2. 큐가 빌 때까지 반복
 		while (!q.isEmpty()) {
-			// 큐에서 원소 꺼내기
+			// 2.A 큐에서 원소 꺼내서 저장
 			int now = q.poll();
 			result.add(now);
-			// 해당 원소와 연결된 노드들의 진입차수에서 1 빼기
-			for (int toIdx = 0; toIdx < graph.get(now).size(); toIdx++) {
-				indegree[graph.get(now).get(toIdx)] -= 1;
-				// 새롭게 진입차수가 0이 되는 노드를 큐에 삽입
-				if (indegree[graph.get(now).get(toIdx)] == 0) {
-					q.offer(graph.get(now).get(toIdx));
+			
+			// 2.B 해당 원소와 연결된 모든 노드들의 진입차수 -1 수행
+			for(int next : graph.get(now)) {
+				indegree[next]--;
+				// 2.C 만약 진입차수가 0이라면 Q에 삽입
+				if(indegree[next] == 0) {
+					q.offer(next);
 				}
 			}
+			
+			// 풀어쓴 코드
+//			for (int toIdx = 0; toIdx < graph.get(now).size(); toIdx++) {
+//				indegree[graph.get(now).get(toIdx)] -= 1;
+//				// 새롭게 진입차수가 0이 되는 노드를 큐에 삽입
+//				if (indegree[graph.get(now).get(toIdx)] == 0) {
+//					q.offer(graph.get(now).get(toIdx));
+//				}
+//			}
 		}
 
 		// 위상 정렬을 수행한 결과 출력
