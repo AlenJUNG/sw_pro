@@ -1,7 +1,5 @@
 package G01_dijkstra;
 
-package G01_ex10_Adv_P0019_일방통행;
-
 import java.io.*;
 import java.util.*;
 
@@ -26,15 +24,14 @@ public class G01_ex10_Adv_P0019_일방통행 {
 		}
 	}
 
-//	static final long INF = 30000000000001L;
-	static final long INF = 2500000000001L;
+	static final long INF = 30000000000001L;
 	static int TC, N, M, type[];
 	static long D[], ans;
 	static ArrayList<Node> graph[];
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/G01_ex10_Adv_P0019_일방통행/G01_ex10_Adv_P0019_일방통행.txt"));
+		System.setIn(new FileInputStream("src/G01_dijkstra/G01_ex10_Adv_P0019_일방통행.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st = null;
@@ -99,65 +96,50 @@ public class G01_ex10_Adv_P0019_일방통행 {
 
 	}
 
-	private static void dijkstra(long[] d, ArrayList<Node>[] gra) {
-		PriorityQueue<Node> pq = new PriorityQueue<>();
-		boolean visited[] = new boolean[N + 1];
-		
-		d[1] = 0;
-		pq.add(new Node(0, 1, 0));
-		
-		while(!pq.isEmpty()) {
-			
-			Node now = pq.poll();
-			System.out.println(now.t);
-			
-			
-		}
-		
-	}
 
-	private static void dijkstra1(long[] d, ArrayList<Node>[] gra, int x) {
+	private static void dijkstra(long[] d, ArrayList<Node>[] gra) {
 		PriorityQueue<Node> pq = new PriorityQueue<Node>();
 		boolean visited[] = new boolean[N + 1];
 
-		d[x] = 0;
-		pq.offer(new Node(0, x, 0));
+		d[1] = 0;
+		pq.offer(new Node(0, 1, 0));
 
-		int red_card = 0;
-		int blue_card = 0;
-		int next_node = 0;
+		int red_card = 1;
+		int blue_card = 1;
 
 		while (!pq.isEmpty()) {
 			Node now = pq.poll();
+			int now_node = now.t;
 			
+			if(visited[now_node]) {
+				continue;
+			}
+			visited[now_node] = true;			
 
-
-//			if (type[now.t] == 1) {
-//				if (red_card == 0) {
-//					continue;
-//				} else {
-//					red_card = 0;
-//				}
-//			}
-//
-//			if (type[now.t] == 2) {
-//				if (blue_card == 0) {
-//					continue;
-//				} else {
-//					blue_card = 0;
-//				}
-//			}
-
-			for (Node next : gra[now.t]) {
-				next_node = next.t;
+			for (Node next : gra[now_node]) {				
+				int next_node = next.t;
 				long value = next.c;
-				if (d[next_node] > d[now.t] + value) {
-					if (type[next_node] == 3) {
+				
+				if (d[next_node] > d[now_node] + value) {
+					if (type[now_node] == 1) {
+						if (red_card == 0) {
+							continue;
+						} else {
+							red_card = 0;
+						}
+					}else if (type[now_node] == 2) {
+						if (blue_card == 0) {
+							continue;
+						} else {
+							blue_card = 0;
+						}
+					}else if (type[next_node] == 3) {
 						red_card = 1;
 						blue_card = 1;
 					}
-					d[next_node] = d[now.t] + value;
-					pq.offer(new Node(now.t, next_node, value));
+					
+					d[next_node] = d[now_node] + value;
+					pq.offer(new Node(now_node, next_node, value));
 				}
 			}
 		}
