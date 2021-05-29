@@ -5,14 +5,14 @@ import java.util.*;
 
 public class G01_ex10_Adv_P0019_일방통행 {
 	static class Node implements Comparable<Node> {
-		int f, t;
+		int t;
 		long c;
+		int card;
 
-		public Node(int f, int t, long c) {
-			this.f = f;
+		public Node(int t, long c, int card) {
 			this.t = t;
 			this.c = c;
-
+			this.card = card;
 		}
 
 		@Override
@@ -25,8 +25,9 @@ public class G01_ex10_Adv_P0019_일방통행 {
 	}
 
 	static final long INF = 30000000000001L;
-	static int TC, N, M, type[];
-	static long D[], ans;
+	static int TC, N, M;
+	static char color[];
+	static long D[][], ans;
 	static ArrayList<Node> graph[];
 
 	@SuppressWarnings("unchecked")
@@ -43,30 +44,19 @@ public class G01_ex10_Adv_P0019_일방통행 {
 			N = Integer.parseInt(st.nextToken());
 			M = Integer.parseInt(st.nextToken());
 
-			D = new long[N + 1];
+			D = new long[4][N + 1];
 			graph = new ArrayList[N + 1];
-			type = new int[N + 1];
+			color = new char[N + 1]; // 지점의 색 정보
 
 			for (int i = 0; i <= N; i++) {
 				graph[i] = new ArrayList<Node>();
-				D[i] = INF;
-			}
-
-//			StringTokenizer id_st = new StringTokenizer(br.readLine());
-
-			String id_st = br.readLine();
-			for (int i = 1; i <= N; i++) {
-				char temp = id_st.charAt(i - 1);
-				if (temp == 'R') {
-					type[i] = 1;
-				} else if (temp == 'B') {
-					type[i] = 2;
-				} else if (temp == 'W') {
-					type[i] = 3;
-				} else {
-					type[i] = 4;
+				for (int j = 0; j <= 3; j++) {
+					D[j][i] = INF;
 				}
 			}
+
+			st = new StringTokenizer(br.readLine());
+			color = st.nextToken().toCharArray(); // * 암기할 것
 
 			int from, to;
 			long cost;
@@ -77,17 +67,23 @@ public class G01_ex10_Adv_P0019_일방통행 {
 				to = Integer.parseInt(st.nextToken());
 				cost = Long.parseLong(st.nextToken());
 
-				graph[from].add(new Node(from, to, cost));
+				// card에 해당하는 부분은 0으로 고정
+				graph[from].add(new Node(to, cost, 0));
 			}
 
-			dijkstra(D, graph);
-			
-			if(D[N] == INF) {
-				bw.write("#" + tc + " " + -1 + "\n");
-			}else {
-				bw.write("#" + tc + " " + D[N] + "\n");
+			dijkstra(D, graph, 3);
+
+			ans = INF;
+			for (int i = 0; i <= 3; i++) {
+				ans = Math.min(ans, D[i][N]);
 			}
-			
+
+			if (ans == INF) {
+				bw.write("#" + tc + " " + -1 + "\n");
+			} else {
+				bw.write("#" + tc + " " + ans + "\n");
+			}
+
 		}
 
 		br.close();
@@ -96,79 +92,59 @@ public class G01_ex10_Adv_P0019_일방통행 {
 
 	}
 
-
-	private static void dijkstra(long[] d, ArrayList<Node>[] gra) {
+	private static void dijkstra(long[][] d, ArrayList<Node>[] gra, int start_card) {
 		PriorityQueue<Node> pq = new PriorityQueue<Node>();
-		boolean visited[] = new boolean[N + 1];
-
-		d[1] = 0;
-		pq.offer(new Node(0, 1, 0));
-
-		int red_card = 1;
-		int blue_card = 1;
-
-		while (!pq.isEmpty()) {
+		 // 첫 출발 시에는 통행권을 모두 들고 있고 시작 거리는 0
+		d[start_card][1] = 0;
+		pq.offer(new Node(1, 0, start_card));
+		
+		while(!pq.isEmpty()) {
 			Node now = pq.poll();
-			int now_node = now.t;
 			
-			if(visited[now_node]) {
+			int nowNode = now.t;
+			long nowDis = now.c;
+			int nowCard = now.card;
+			
+			char nowColor = color[nowNode - 1];
+			int newCard = nowCard;
+			
+			/*
+			 * if(nowEnd == N){ // 이미 도착한 지점이 종료점이며 더이상 진행하지 않음 break;
+			 */
+			
+			// 원래 이 길로 오는 루트가 있어 현재까지 확정한 거리 d[] 보다 새로운 거리가 더 크면 PASS
+			if(d[nowCard][nowNode] < nowDis) {
 				continue;
 			}
-			visited[now_node] = true;			
-
-			for (Node next : gra[now_node]) {				
-				int next_node = next.t;
-				long value = next.c;
+			
+			if(nowColor == 'R' && (nowCard == 1 || nowCard == 3)) {
+				newCard = nowCard - 1;
+			}else if(nowColor == 'B' && (nowCard == 2 || nowCard == 3)) {
+				newCard = nowCard - 2;
+			}else if(nowColor == 'G') {
+				newCard = nowCard;
+			}else if(nowColor == 'W') {
+				newCard = 3;
+			}else {
+				continue;
+			}
+			
+			for(Node next : gra[nowNode]) {
+				int nextNode = next.t;
+				long nextDis = next.c;
+				// * 주의 : next의 card는 위에서 구해놓았다
 				
-				if (d[next_node] > d[now_node] + value) {
-					if (type[now_node] == 1) {
-						if (red_card == 0) {
-							continue;
-						} else {
-							red_card = 0;
-						}
-					}else if (type[now_node] == 2) {
-						if (blue_card == 0) {
-							continue;
-						} else {
-							blue_card = 0;
-						}
-					}else if (type[next_node] == 3) {
-						red_card = 1;
-						blue_card = 1;
-					}
-					
-					d[next_node] = d[now_node] + value;
-					pq.offer(new Node(now_node, next_node, value));
+				if(d[newCard][nextNode] > d[nowCard][nowNode] + nextDis) {
+					d[newCard][nextNode] = d[nowCard][nowNode] + nextDis;
+					pq.offer(new Node(nextNode, d[newCard][nextNode], newCard));
 				}
 			}
-		}
+			
+		}		
 	}
 }
 
 /*
-3
-6 9
-RBWBGB
-1 2 3
-2 5 1
-3 1 2
-2 3 7
-2 4 5
-5 4 1
-4 3 1
-4 6 10
-3 4 4
-3 2
-RBB
-1 2 10
-2 3 10
-5 5
-BRWBG
-4 5 3
-1 2 1
-3 2 6
-2 3 5
-2 4 2
-*/
-
+ * 3 6 9 RBWBGB 1 2 3 2 5 1 3 1 2 2 3 7 2 4 5 5 4 1 4 3 1 4 6 10 3 4 4 3 2 RBB 1
+ * 2 10 2 3 10 5 5 BRWBG 4 5 3 1 2 1 3 2 6 2 3 5 2 4 2
+ */
