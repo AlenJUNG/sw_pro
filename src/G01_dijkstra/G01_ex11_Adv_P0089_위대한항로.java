@@ -39,7 +39,6 @@ public class G01_ex11_Adv_P0089_위대한항로 {
 
 		for (int tc = 1; tc <= TC; tc++) {
 			st = new StringTokenizer(br.readLine());
-
 			N = Integer.parseInt(st.nextToken());
 			M = Integer.parseInt(st.nextToken());
 			K = Integer.parseInt(st.nextToken());
@@ -53,12 +52,11 @@ public class G01_ex11_Adv_P0089_위대한항로 {
 				D[i] = INF;
 			}
 
-			int from, to, cost;
-			for (int i = 1; i <= N; i++) {
+			for (int i = 1; i <= M; i++) {
 				st = new StringTokenizer(br.readLine());
-				from = Integer.parseInt(st.nextToken());
-				to = Integer.parseInt(st.nextToken());
-				cost = Integer.parseInt(st.nextToken());
+				int from = Integer.parseInt(st.nextToken());
+				int to = Integer.parseInt(st.nextToken());
+				long cost = Integer.parseInt(st.nextToken());
 
 				graph[to].add(new Node(from, cost));
 			}
@@ -104,7 +102,12 @@ public class G01_ex11_Adv_P0089_위대한항로 {
 				long dis = next.dis;
 
 				if (d[next_node] > d[now_node] + dis - friend[next_node]) {
-					d[next_node] = d[now_node] + dis - friend[next_node];
+					if(d[now_node] + dis - friend[next_node] < 0) {
+						d[next_node] = 0;
+					}else {
+						d[next_node] = d[now_node] + dis - friend[next_node];
+					}
+					
 					pq.offer(new Node(next_node, d[next_node]));
 				}
 			}
