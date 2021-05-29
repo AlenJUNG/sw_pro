@@ -1,5 +1,7 @@
 package G01_dijkstra;
 
+// 2021.05.29 PASS
+
 import java.io.*;
 import java.util.*;
 
@@ -24,8 +26,8 @@ public class G01_ex11_Adv_P0089_위대한항로 {
 
 	static int TC, N, M, K;
 	static int friend[];
-	static final int INF = 2000000000 + 1;
-	static long D[], ans;
+	static final int INF = 2000000000 + 1; // E * cost
+	static long D[];
 	static ArrayList<Node> graph[];
 
 	@SuppressWarnings("unchecked")
@@ -52,6 +54,7 @@ public class G01_ex11_Adv_P0089_위대한항로 {
 				D[i] = INF;
 			}
 
+			// 역방향 dijkstra
 			for (int i = 1; i <= M; i++) {
 				st = new StringTokenizer(br.readLine());
 				int from = Integer.parseInt(st.nextToken());
@@ -61,6 +64,7 @@ public class G01_ex11_Adv_P0089_위대한항로 {
 				graph[to].add(new Node(from, cost));
 			}
 
+			// 식량 입력
 			for (int i = 1; i <= K; i++) {
 				st = new StringTokenizer(br.readLine());
 				int num = Integer.parseInt(st.nextToken());
@@ -68,14 +72,12 @@ public class G01_ex11_Adv_P0089_위대한항로 {
 				friend[num] = food;
 			}
 
+			// dijkstra 시작점을 N으로 한다
 			dijkstra(graph, D, N);
 
 			bw.write("#" + tc + " " + D[1] + "\n");
-			
+
 		}
-		
-		
-		// D[1]이 답
 
 		br.close();
 		bw.flush();
@@ -92,28 +94,30 @@ public class G01_ex11_Adv_P0089_위대한항로 {
 			Node now = pq.poll();
 			int now_node = now.v;
 			long now_dis = now.dis;
-
+			
+			// 식량을 보급 받을 수 있는 것까지 고려하여 경로계산할 것
 			if (d[now_node] < now_dis - friend[now_node]) {
 				continue;
 			}
-
+	
 			for (Node next : gra[now_node]) {
 				int next_node = next.v;
 				long dis = next.dis;
-
+				
+				// * 핵심코드 : 최적 경로가 발견되었을 때
 				if (d[next_node] > d[now_node] + dis - friend[next_node]) {
-					if(d[now_node] + dis - friend[next_node] < 0) {
+					// 최적경로 값이 음수인 경우에는 '0'으로 처리함
+					// why? 시작점에서 가져가야하는 식량 계산 가능을 위해
+					if (d[now_node] + dis - friend[next_node] < 0) {
 						d[next_node] = 0;
-					}else {
+					// 그렇지 않으면 그냥 계산
+					} else {
 						d[next_node] = d[now_node] + dis - friend[next_node];
 					}
-					
+
 					pq.offer(new Node(next_node, d[next_node]));
 				}
 			}
-
 		}
-
 	}
-
 }
