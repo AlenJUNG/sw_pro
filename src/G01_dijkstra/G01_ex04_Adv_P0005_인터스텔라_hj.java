@@ -65,6 +65,7 @@ public class G01_ex04_Adv_P0005_인터스텔라_hj {
 			start = Integer.parseInt(st.nextToken()); 
 			end = Integer.parseInt(st.nextToken());
 			
+			ans = 0;
 			dijkstra(D, graph, start, end);
 			
 			
@@ -79,16 +80,25 @@ public class G01_ex04_Adv_P0005_인터스텔라_hj {
 	private static void dijkstra(long[][] d, ArrayList<Node>[] gra, int s, int e) {
 		PriorityQueue<Node> pq = new PriorityQueue<>();
 		d[0][s] = 0;
-		// node, cost, k : 초기 k는 2
-		pq.offer(new Node(s, 0, 2));
+		// node, cost, k
+		// * 초기 k는 0 : 초기값 확정 필요
+		pq.offer(new Node(s, 0, 0));
 		
 		while(!pq.isEmpty()) {
 			Node now = pq.poll();
 			
 			int now_node = now.node;
-			long now_dis	= now.cost;
+			long now_dis= now.cost;
+			int now_k = now.k;
 			
-			if(d[0][now_node] < now_dis) {
+			// 1. 탐색 정점이 도착 정점일 경우 프로세스 종료
+			if(now_node == end) {
+				ans = now_dis;
+				break;
+			}
+			
+			// 2. pq로 뽑은 dis가 기존 확정 dis보다 크면 PASS			
+			if(d[now_k][now_node] < now_dis) {
 				continue;
 			}
 			
@@ -96,12 +106,18 @@ public class G01_ex04_Adv_P0005_인터스텔라_hj {
 				int next_node = next.node;
 				long next_dis = next.cost;
 				
-				for(int i = 0; i <= 2; i++) {
-					if(d[i][next_node] > d[i][now_node] + next_dis) {
-						d[i][next_node] = d[i][now_node] + next_dis;
-						pq.offer(new Node(next_node, d[i][next_node]));
-					}
-				}				
+				// 1. 워프패킷을 사용하지 않거나
+				if(d[now_k][next_node] > d[now_k][now_node] + next_dis) {
+					d[now_k][next_node] = d[now_k][now_node] + next_dis;
+					pq.offer(new Node(next_node, d[now_k][next_node], now_k));
+				}
+				
+				// 2. 워프패킷을 사용하거나				
+				if(now_k <= 2 && d[now_k + 1][next_node] > now_dis + 1) {
+					d[now_k][next_node] = d[now_k][now_node] + next_dis;
+					pq.offer(new Node(next_node, d[now_k][next_node], now_k + 1));
+				}
+								
 			}
 		}
 		
