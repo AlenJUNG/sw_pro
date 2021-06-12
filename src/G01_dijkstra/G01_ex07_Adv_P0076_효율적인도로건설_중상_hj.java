@@ -1,5 +1,7 @@
 package G01_dijkstra;
 
+// 2021.06.12 풀이 중, 아직 풀지 못함
+
 import java.io.*;
 import java.util.*;
 
@@ -33,9 +35,11 @@ public class G01_ex07_Adv_P0076_효율적인도로건설_중상_hj {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st = null;
+		
+		TC = Integer.parseInt(br.readLine());
 
 		for (int tc = 1; tc <= TC; tc++) {
-			TC = Integer.parseInt(br.readLine());
+			
 			st = new StringTokenizer(br.readLine());
 
 			N = Integer.parseInt(st.nextToken());
@@ -65,8 +69,8 @@ public class G01_ex07_Adv_P0076_효율적인도로건설_중상_hj {
 				graph_from[to].add(new Node(from, distance));
 			}
 
-			dijkstra(graph_to, D_to, 1);
-			dijkstra(graph_from, D_from, N);
+			dijkstra(graph_to, D_to, 1, N);
+			dijkstra(graph_from, D_from, N, 1);
 
 			D = D_to[N];
 
@@ -80,15 +84,18 @@ public class G01_ex07_Adv_P0076_효율적인도로건설_중상_hj {
 			 * - D_to[A]
 			 */
 			ans = 0;
-			System.out.println("1");
-			
+			// *요약 : a를 기준으로 만족하는 값을 이분탐색으로 수량만 신속하게 찾음
+			// 1부터 N - 1 까지가 A의 대상이면 기준점이 됌
 			for (int a = 1; a <= N - 1; a++) {
+				// a는 0보다 크고 INF 보다 작은 것을 기준함
 				if (0 < D_to[a] && D_to[a] < INF) {
+					
 					int base = D - 1 - D_to[a];
 					if (base > 0) {
 						int start = 1;
 						int end = N - 1;
 						int mid = 0;
+						
 						while (start < end) {
 							mid = (start + end) / 2;
 							if (D_from[mid] < base) {
@@ -111,17 +118,22 @@ public class G01_ex07_Adv_P0076_효율적인도로건설_중상_hj {
 
 	}
 
-	private static void dijkstra(ArrayList<Node>[] gra, int[] d, int start) {
+	private static void dijkstra(ArrayList<Node>[] gra, int[] d, int start, int end) {
 		PriorityQueue<Node> pq = new PriorityQueue<>();
 		d[start] = 0;
-		pq.offer(new Node(1, 0));
+		pq.offer(new Node(start, 0));
 
 		while (!pq.isEmpty()) {
 			Node now = pq.poll();
-
-			if (d[now.node] < now.dis) {
-				continue;
+			
+			if(now.node == end) {
+				pq.clear();
+				break;
 			}
+			
+//			if (d[now.node] < now.dis) {
+//				continue;
+//			}
 
 			for (Node next : gra[now.node]) {
 				if (d[next.node] > d[now.node] + next.dis) {
@@ -134,3 +146,24 @@ public class G01_ex07_Adv_P0076_효율적인도로건설_중상_hj {
 	}
 
 }
+/*
+2
+5 4
+1 2 1
+2 3 2
+3 4 1
+4 5 2
+10 12
+1 5 6
+1 6 12
+1 8 8
+2 4 1
+3 5 3
+4 6 4
+5 7 5
+6 8 5
+6 10 1
+7 9 8
+8 9 1
+9 10 6
+*/
