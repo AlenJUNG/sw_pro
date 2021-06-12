@@ -39,7 +39,7 @@ public class PRJ_ex {
 			// ** 아래 code로 사전에 방지할 것
 
 			int mid = start + ((end - start) / 2);
-
+			
 			if (a[mid] == target) {
 				return mid;
 			} else if (a[mid] < target) {
