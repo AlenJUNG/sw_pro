@@ -60,7 +60,12 @@ public class G01_ex04_Adv_P0005_인터스텔라_hj {
 				from = Integer.parseInt(st.nextToken());
 				to = Integer.parseInt(st.nextToken());
 				value = Integer.parseInt(st.nextToken());
+<<<<<<< HEAD
 
+=======
+				
+				// * 항상 방향에 주의할 것
+>>>>>>> branch 'master' of https://github.com/shadyhj/sw_pro.git
 				graph[from].add(new Node(to, value, 0));
 				graph[to].add(new Node(from, value, 0));
 			}
@@ -71,11 +76,17 @@ public class G01_ex04_Adv_P0005_인터스텔라_hj {
 
 			ans = 0;
 			dijkstra(D, graph, start, end);
+<<<<<<< HEAD
 //			for(int i = 0 ; i <= 2; i++) {
 //				ans = Math.min(ans, D[i][end]);
 //			}
 
 			bw.write("#" + tc + " " + ans + "\n");
+=======
+			
+			bw.write("#" + tc + " " + ans + "\n");
+			
+>>>>>>> branch 'master' of https://github.com/shadyhj/sw_pro.git
 		}
 
 		br.close();
@@ -99,8 +110,13 @@ public class G01_ex04_Adv_P0005_인터스텔라_hj {
 			long now_dis = now.cost;
 			int now_k = now.k;
 			
+<<<<<<< HEAD
 			// 1. pq로 뽑은 dis가 기존 확정 dis보다 크면 PASS
 			if (d[now_k][now_node] < now_dis) {
+=======
+			// 1. pq로 뽑은 dis가 기존 확정 dis보다 크면 PASS			
+			if(d[now_k][now_node] < now_dis) {
+>>>>>>> branch 'master' of https://github.com/shadyhj/sw_pro.git
 				continue;
 			}
 			
@@ -109,8 +125,13 @@ public class G01_ex04_Adv_P0005_인터스텔라_hj {
 				ans = now_dis;
 				break;
 			}			
+<<<<<<< HEAD
 
 			for (Node next : gra[now_node]) {
+=======
+			
+			for(Node next : gra[now_node]) {
+>>>>>>> branch 'master' of https://github.com/shadyhj/sw_pro.git
 				int next_node = next.node;
 				long next_dis = next.cost;
 				
@@ -119,11 +140,17 @@ public class G01_ex04_Adv_P0005_인터스텔라_hj {
 					d[now_k][next_node] = d[now_k][now_node] + next_dis;
 					pq.offer(new Node(next_node, d[now_k][next_node], now_k));
 				}
+<<<<<<< HEAD
 
 				// 2. 워프패킷을 사용하거나
 				//	a. 현재 워프패킷의 여유가 있고 = K 이하
 				//	b. 워프패킷을 썼을 때 확정값이 더 작은 경우
 				if (now_k < K && d[now_k + 1][next_node] > now_dis + 1) {
+=======
+				
+				// 2. 워프패킷을 사용하거나				
+				if(now_k < K && d[now_k + 1][next_node] > now_dis + 1) {
+>>>>>>> branch 'master' of https://github.com/shadyhj/sw_pro.git
 					d[now_k + 1][next_node] = now_dis + 1;
 					pq.offer(new Node(next_node, d[now_k + 1][next_node], now_k + 1));
 				}
