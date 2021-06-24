@@ -23,7 +23,7 @@ public class Main_210624 {
 			while (size < N) {
 				size *= 2;
 			}
-
+//
 			tree = new long[size * 2];
 
 			for (int i = 1; i <= N; i++) {
