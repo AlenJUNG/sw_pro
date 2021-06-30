@@ -1,5 +1,9 @@
 package D04_인덱스트리;
 
+/* 작성일 : 210630
+ * 풀이횟수 : 3
+ */
+
 import java.io.*;
 import java.util.*;
 
