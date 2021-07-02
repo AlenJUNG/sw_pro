@@ -19,7 +19,7 @@ public class hj_test {
 				
 		cntM = 0;
 		intervalSum = 0;
-		end = 1;
+		end = 1;		
 		
 		// start를 1부터 N까지
 		for(int start = 1; start <= N; start++) {
