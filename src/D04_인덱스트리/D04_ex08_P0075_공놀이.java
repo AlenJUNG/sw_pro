@@ -16,6 +16,8 @@ public class D04_ex08_P0075_공놀이 {
 		public int compareTo(Node other) {
 			if(this.value < other.value) {
 				return -1;
+			}else if(this.value == other.value){
+				return this.type - other.type;
 			}
 			return 1;
 		}
@@ -53,37 +55,62 @@ public class D04_ex08_P0075_공놀이 {
 			}
 			
 			size = 1;
-			while(size > N * 2) {
+			while(size < N * 2) {
 				size *= 2;
 			}
 			
 			tree_A = new int[size * 2];
 			tree_B = new int[size * 2];
 			
-			int no = 1;
-			int temp = 0;
+			int no = 0;
+			int temp_A = 0;
+			int temp_B = 0;
 			
 			while(!pq.isEmpty()) {
 				Node now = pq.poll();
 				// 처음이면 전과 비교할 필요 없음
 				// type이 0이면 A, 1이면 B
-				if(no == 1) {
+				if(no == 0) {
 					if(now.type == 0) {						
-						update(tree_A, no, 1);
 						no++;
-						temp = now.value;
+						// tree_A[no] 에 +1 하고 업데이트
+						update(tree_A, no, 1);		
+						// 2번째 공부터 비교를 위해 temp 생성하여 값 입력함
+						temp_A = now.value;
 						continue;
 					}else {
-						update(tree_B, no, 1);
 						no++;
-						temp = now.value;
+						update(tree_B, no, 1);						
+						temp_B = now.value;
 						continue;
 					}
 				}else {
-					
-					
+					// 전에 나온 공 값과 같다면
+					if(now.type == 0) {
+						if(now.value == temp_A) {
+							update(tree_A, no, 1);	
+							continue;
+						}else {
+							no++;
+							update(tree_A, no, 1);
+							temp_A = now.value;
+							continue;
+						}						
+					}else {
+						if(now.value == temp_B) {
+							update(tree_B, no, 1);	
+							continue;
+						}else {
+							no++;
+							update(tree_B, no, 1);
+							temp_B = now.value;
+							continue;
+						}	
+					}					
 				}
 			}
+			
+			System.out.println("check");
 		
 			
 			
@@ -93,6 +120,18 @@ public class D04_ex08_P0075_공놀이 {
 		bw.flush();
 		bw.close();
 
+	}
+
+	private static void update(int[] tree, int no, int x) {
+		int idx = size + no - 1;
+		tree[idx] += 1;
+		idx /= 2;
+		
+		while(idx > 0) {
+			tree[idx] += 1;
+			idx /= 2;
+		}
+		
 	}
 
 }
