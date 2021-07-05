@@ -6,6 +6,9 @@ import java.io.*;
 /*
  * 2021.07.05
  * 시도 1
+ * 간선의 방향성이 있는 경우 트리의 특징
+ * 1. 노드로 들어오는 in-degree가 root 노드는 0이며 나머지는 모두 1
+ * 2. 노드에서 나가는 out-degree가 leaf 노드에서 0이며 나머지는 1 이상
  */
 
 public class G05_ex13_모의P0001_잠자는사이에 {
@@ -56,7 +59,7 @@ public class G05_ex13_모의P0001_잠자는사이에 {
 				if (indegree[end] != 2) {
 					// 사이클이 있다면
 					if (find(start) == find(end)) {
-						ansS = start;
+						ansS = start;	// * 주의 조상이(find(start)) 아니라 start
 						ansE = end;
 						// 마지막 값이기에 break는 두지 않음
 					} else {
