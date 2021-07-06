@@ -36,8 +36,10 @@ public class G05_ex01_연습P0007_고속도로건설 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st = null;
-
+				
 		TC = Integer.parseInt(br.readLine());
+		
+		double T1 = System.currentTimeMillis();
 
 		for (int tc = 1; tc <= TC; tc++) {
 			N = Integer.parseInt(br.readLine());
@@ -79,12 +81,14 @@ public class G05_ex01_연습P0007_고속도로건설 {
 			}
 
 			bw.write("#" + tc + " " + ans + "\n");
-
+			
 		}
-
-		br.close();
+		double T2 = System.currentTimeMillis();	
+//		System.out.println((T2 - T1)/1000);	// 실행시간 초로 변환
+		
+		br.close();			
 		bw.flush();
-		bw.close();
+		bw.close();		
 
 	}
 
