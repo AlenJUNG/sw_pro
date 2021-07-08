@@ -4,8 +4,9 @@ import java.io.*;
 import java.util.*;
 
 /*
- * Update : 2021.07.08
- * 혼자 힘으로 풀기는 쉽지 않을 것 같음
+ * Update : 2021.07.08 Try 1,
+ * 프림 알고리즘
+ * 혼자 힘으로 풀기는 쉽지 않음, 연습 필요
  */
 
 public class G05_ex14_P0079_도시계획 {
