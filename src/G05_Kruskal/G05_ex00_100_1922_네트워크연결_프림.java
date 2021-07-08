@@ -91,13 +91,7 @@ public class G05_ex00_100_1922_네트워크연결_프림 {
 		boolean visit[] = new boolean[N + 1];	// 방문여부 체크
 		pq.offer(new Node(1, 0));	// 초기값 pc node 1부터 체크 * 어디서 시작하든 상관없나?
 
-		while (!pq.isEmpty()) {
-			// 왜 N - 1이 아니라 N인지 확인
-			// 간선기준이 아니라 노드 기준
-			if (visitCnt == N) {
-				break;
-			}
-			
+		while (!pq.isEmpty()) {				
 			Node now = pq.poll();
 			
 			// 기방문 노드면 continue
@@ -109,6 +103,12 @@ public class G05_ex00_100_1922_네트워크연결_프림 {
 			
 			ans += now.cost;
 			visitCnt++;
+			
+			// 왜 N - 1이 아니라 N인지 확인
+			// 간선기준이 아니라 노드 기준	
+			if (visitCnt == N) {
+				break;
+			}
 			
 			for (Node next : pc[now.node]) {
 				if (!visit[next.node] && dis[now.node][next.node] > next.cost) {

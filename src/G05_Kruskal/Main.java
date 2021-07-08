@@ -75,7 +75,7 @@ public class Main {
 		boolean visit[];
 		visit = new boolean[N + 1];
 		int visitCnt = 0;
-		pq.offer(new Node(1, 0)); // 첫시작 1하고 연결된 노드들 중
+		pq.offer(new Node(1, 0)); // 첫시작 임의 1로 설정, why? MST이기 때문에 모두 이어져야 한다.
 
 		while (!pq.isEmpty()) {
 			Node now = pq.poll();
@@ -84,10 +84,15 @@ public class Main {
 				continue;
 			}
 			visit[now.node] = true;
-
+			
+			// 뽑은 노드의 총합은 N이 되어야 함
 			ans += now.cost;
 			visitCnt++;
+			if(visitCnt == N) {
+				break;
+			}
 			
+			// 인접리스트 후보군 pq에 넣기
 			for (Node next : graph[now.node]) {
 				if (visit[next.node] == false && dis[now.node][next.node] > next.cost) {
 					dis[now.node][next.node] = next.cost;
