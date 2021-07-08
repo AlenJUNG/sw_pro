@@ -5,6 +5,7 @@ import java.util.*;
 
 /*
  * Update : 2021.07.08
+ * 혼자 힘으로 풀기는 쉽지 않을 것 같음
  */
 
 public class G05_ex14_P0079_도시계획 {
@@ -83,8 +84,6 @@ public class G05_ex14_P0079_도시계획 {
 				int y = Integer.parseInt(st.nextToken());
 				cityInfo[i] = new city(0, x, y); // 초기값 세팅할 때는 수원지가 아닌 것으로 받기
 			}
-			
-			
 
 			// 2. 도시간 정보 저장 > 전체 간선 저장
 			for (int i = 1; i <= N - 1; i++) {
