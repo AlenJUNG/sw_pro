@@ -83,6 +83,8 @@ public class G05_ex00_100_1922_네트워크연결_프림 {
 		bw.close();
 
 	}
+	
+	
 	// 다익스트라 알고리즘과 비슷함
 	private static void prim() {
 		PriorityQueue<Node> pq = new PriorityQueue<>();		
