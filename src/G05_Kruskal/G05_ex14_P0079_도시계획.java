@@ -119,7 +119,7 @@ public class G05_ex14_P0079_도시계획 {
 				int water_N = now.water;
 				int city_N = now.city;
 
-				// 수원지로 이어지지 않은 도시인 경우
+				// 4.1 수원지로 이어지지 않은 도시인 경우에만 연산
 				if (cityInfo[water_N].water == 1 && cityInfo[city_N].water != 1) {
 					cityInfo[city_N].water = 1; // 수원지로 반영
 					visitCnt++; // 방문도시 반영 +1

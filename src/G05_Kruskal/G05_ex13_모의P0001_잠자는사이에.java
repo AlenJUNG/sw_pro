@@ -4,9 +4,9 @@ import java.util.*;
 import java.io.*;
 
 /*
- * 2021.07.05
- * 시도 1
- * 간선의 방향성이 있는 경우 트리의 특징
+ * 일시 : 2021.07.07
+ * 시도 : 2
+ * 중요) 간선의 방향성이 있는 경우, 트리의 특징
  * 1. 노드로 들어오는 in-degree가 root 노드는 0이며 나머지는 모두 1
  * 2. 노드에서 나가는 out-degree가 leaf 노드에서 0이며 나머지는 1 이상
  */
@@ -68,7 +68,7 @@ public class G05_ex13_모의P0001_잠자는사이에 {
 				}
 			}
 
-			// 2. indegree가 2인 경우가 있다면 계산
+			// 2. 1. 계산 다음 많약 indegree가 2인 경우가 남아있다면 추가 계산
 			for (int i = 0; i < al.size(); i++) {
 				int start = al.get(i).start;
 				int end = al.get(i).end;
