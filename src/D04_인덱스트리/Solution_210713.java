@@ -4,66 +4,51 @@ import java.io.*;
 import java.util.*;
 
 /*
- * 구간합 중, 시도 많이
- * Update : 2021.07.13
+ * 문제 : 슈퍼이벤트
+ * 일자 : 210713
+ * 시도 : 3
  */
 
 public class Solution_210713 {
 
-	static int TC, N, Q, size;
-	static long ans, tree[];
+	static int TC, Q, size;
+	static int tree[];
+	static final int MAX = 100000;
 
 	public static void main(String[] args) throws IOException {
-		System.setIn(new FileInputStream("src/D04_인덱스트리/D04_ex01_연습P0019_구간합.txt"));
+		System.setIn(new FileInputStream("src/D04_인덱스트리/D04_ex07_P0041_K_Heap슈퍼이벤트.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringBuilder sb = null;
 		StringTokenizer st = null;
 
-		TC = Integer.parseInt(br.readLine());
+		TC = Integer.parseInt(br.readLine().trim());
 
 		for (int tc = 1; tc <= TC; tc++) {
-			N = Integer.parseInt(br.readLine());
-			Q = Integer.parseInt(br.readLine());
-
+			Q = Integer.parseInt(br.readLine().trim());
+			sb =  new StringBuilder();
+			
 			size = 1;
-			while (size < N) {
+			while (size < MAX) {
 				size *= 2;
 			}
 
-			tree = new long[size * 2];
-			
-			// 초기값 입력
-			for(int i = 1; i <= N; i++) {
-				int id = size + i - 1;
-				tree[id] = i;
-			}
-			
-			// 초기값 업데이트
-			for(int i = size - 1; i > 0; i--) {
-				tree[i] = tree[2 * i] + tree[2 * i + 1];
-			}
+			tree = new int[size * 2];
 
-			// opt이 0이면 x번째 수를 y로 변경
-			// opt이 1이면 x번째 수부터 y번째 수까지의 합을 구함
-			int opt, x, y;
-			ans = 0;
-			
+			int opt, x;
 			for (int i = 1; i <= Q; i++) {
-				st = new StringTokenizer(br.readLine());
-
+				st = new StringTokenizer(br.readLine().trim());
 				opt = Integer.parseInt(st.nextToken());
 				x = Integer.parseInt(st.nextToken());
-				y = Integer.parseInt(st.nextToken());
 
-				if (opt == 0) {
-					change(x, y);
+				if (opt == 1) {
+					update(x);
 				} else {
-					ans += getSum(x, y);
+					sb.append(search(x) + " ");
 				}
-
 			}
-			ans %= 1000000007;
-			bw.write("#" + tc + " " + ans + "\n");
+						
+			bw.write("#" + tc + " " + sb.toString() + "\n");
 
 		}
 
@@ -73,36 +58,27 @@ public class Solution_210713 {
 
 	}
 
-	private static long getSum(int x, int y) {
-		long res = 0;
-		int start = size + x - 1;
-		int end = size + y - 1;
-
-		while (start <= end) {
-			if (start % 2 == 1) {
-				res += tree[start];
-				start++;
+	private static int search(int x) {
+		int node = 1;
+		while(node < size) {
+			int child_node = node * 2;
+			if(x > tree[child_node]) {
+				x = x - tree[child_node];
+				node = child_node + 1;
+			}else {
+				node = child_node;
 			}
-			if (end % 2 == 0) {
-				res += tree[end];
-				end--;
-			}
-			start /= 2;
-			end /= 2;
-
 		}
-		return res;
+		return node - size + 1;
 	}
 
-	// x번째 수를 y로 변경 후 업데이트
-	private static void change(int x, int y) {
+	private static void update(int x) {
 		int idx = size + x - 1;
-		int value = y - (int) tree[idx];
-		tree[idx] += value;
+		tree[idx]++;
 		idx /= 2;
 
 		while (idx > 0) {
-			tree[idx] += value;
+			tree[idx]++;
 			idx /= 2;
 		}
 	}
