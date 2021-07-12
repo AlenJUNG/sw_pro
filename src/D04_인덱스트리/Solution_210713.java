@@ -7,6 +7,7 @@ import java.util.*;
  * 문제 : 슈퍼이벤트
  * 일자 : 210713
  * 시도 : 3
+ * 노트 : 뽑았으면 빼고 신규 업데이트 필요
  */
 
 public class Solution_210713 {
@@ -42,7 +43,7 @@ public class Solution_210713 {
 				x = Integer.parseInt(st.nextToken());
 
 				if (opt == 1) {
-					update(x);
+					update(x, 1);
 				} else {
 					sb.append(search(x) + " ");
 				}
@@ -69,16 +70,19 @@ public class Solution_210713 {
 				node = child_node;
 			}
 		}
+		
+		update(node - size + 1, -1);
+		
 		return node - size + 1;
 	}
 
-	private static void update(int x) {
+	private static void update(int x, int n) {
 		int idx = size + x - 1;
-		tree[idx]++;
+		tree[idx] += n;
 		idx /= 2;
 
 		while (idx > 0) {
-			tree[idx]++;
+			tree[idx] += n;
 			idx /= 2;
 		}
 	}
