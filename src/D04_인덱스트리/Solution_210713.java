@@ -31,11 +31,23 @@ public class Solution_210713 {
 			}
 
 			tree = new long[size * 2];
+			
+			// 초기값 입력
+			for(int i = 1; i <= N; i++) {
+				int id = size + i - 1;
+				tree[id] = i;
+			}
+			
+			// 초기값 업데이트
+			for(int i = size - 1; i > 0; i--) {
+				tree[i] = tree[2 * i] + tree[2 * i + 1];
+			}
 
 			// opt이 0이면 x번째 수를 y로 변경
 			// opt이 1이면 x번째 수부터 y번째 수까지의 합을 구함
 			int opt, x, y;
 			ans = 0;
+			
 			for (int i = 1; i <= Q; i++) {
 				st = new StringTokenizer(br.readLine());
 
@@ -85,11 +97,12 @@ public class Solution_210713 {
 	// x번째 수를 y로 변경 후 업데이트
 	private static void change(int x, int y) {
 		int idx = size + x - 1;
-		tree[idx] = y;
+		int value = y - (int) tree[idx];
+		tree[idx] += value;
 		idx /= 2;
 
 		while (idx > 0) {
-			tree[idx] = tree[idx * 2] + tree[idx * 2 + 1];
+			tree[idx] += value;
 			idx /= 2;
 		}
 	}
