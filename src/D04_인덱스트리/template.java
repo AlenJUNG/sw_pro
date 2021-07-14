@@ -4,9 +4,9 @@ import java.io.*;
 import java.util.*;
 
 /*
- * 문제 :
- * 일자 :
- * 시도 :
+ * 문제 : 
+ * 일자 : 
+ * 시도 : 
  */
 
 public class template {

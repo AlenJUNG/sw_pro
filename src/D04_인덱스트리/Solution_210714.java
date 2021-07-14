@@ -23,8 +23,8 @@ public class Solution_210714 {
 	}
 	
 	static Tank tanks[];
-	static int TC, N, size, tree[];
-	static long ans;
+	static int TC, N, size;
+	static long tree[], ans;
 
 	public static void main(String[] args) throws IOException {
 		System.setIn(new FileInputStream("src/D04_인덱스트리/D04_ex02_P0058_탱크_중상.txt"));
@@ -44,7 +44,7 @@ public class Solution_210714 {
 				size *= 2;
 			}
 			// tree 배열 선언
-			tree = new int[size * 2];
+			tree = new long[size * 2];
 			
 			// Tank 좌표 입력
 			int a, b, c;
