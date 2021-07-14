@@ -20,7 +20,7 @@ public class Solution_210715_화살 {
 		}
 	}
 
-	static int TC, N, size, target, tree[], height[], power[], score[];
+	static int TC, N, size, target, tree[], power[];
 	static Building buildings[];
 	static long ans;
 
@@ -37,9 +37,7 @@ public class Solution_210715_화살 {
 			N = Integer.parseInt(br.readLine());
 
 			buildings = new Building[N + 1];
-			height = new int[N + 1];
 			power = new int[N + 1];
-			score = new int[N + 1];
 
 			st1 = new StringTokenizer(br.readLine());
 			st2 = new StringTokenizer(br.readLine());
@@ -49,9 +47,7 @@ public class Solution_210715_화살 {
 				b = Integer.parseInt(st2.nextToken());
 
 				buildings[i] = new Building(i, a, b);
-				height[i] = a;
 				power[i] = b;
-				score[i] = i;
 			}
 
 			// height 내림차순 정렬
@@ -66,7 +62,7 @@ public class Solution_210715_화살 {
 					if (o2.h < o1.h) {
 						return -1;
 					} else if (o2.h == o1.h) {
-						if (o2.id < o1.id) {
+						if (o1.id < o2.id) {
 							return -1;
 						}
 					}
@@ -87,8 +83,9 @@ public class Solution_210715_화살 {
 
 				int id = buildings[i].id;
 				// search : 몇 번째 노드인가?
-				int temp = getSum(1, id - 1) + buildings[id].p + 1;
-				
+				// * 주의 : 최대한 단순화할 것, 변수 헷갈림
+				int temp = getSum(1, id - 1) + power[id] + 1;
+
 				if (temp > tree[1]) {
 					update(id);
 					continue;
@@ -122,9 +119,7 @@ public class Solution_210715_화살 {
 		}
 		return node - size + 1;
 	}
-	
-	
-	
+
 	private static void update(int id) {
 		int idx = id + size - 1;
 		tree[idx] += 1;
