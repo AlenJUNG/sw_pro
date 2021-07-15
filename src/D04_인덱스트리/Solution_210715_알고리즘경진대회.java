@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 /*
- * 문제 : 84 알고리즘경진대회
+ * 문제 : 알고리즘경진대회
  * 일자 : 210715
  * 시도 : 3
  */
@@ -34,10 +34,10 @@ public class Solution_210715_알고리즘경진대회 {
 			for (int i = 1; i <= N; i++) {
 				a = Integer.parseInt(st1.nextToken());
 				b = Integer.parseInt(st2.nextToken());
-				A[i] = a;	// 층별 직원 수
-				G[i] = b;	// 팀 구성 가능한 층
+				A[i] = a; // 층별 직원 수
+				G[i] = b; // 팀 구성 가능한 층
 			}
-			
+
 			// 트리 사이징
 			size = 1;
 			while (size < N) {
@@ -46,44 +46,43 @@ public class Solution_210715_알고리즘경진대회 {
 
 			gcd_tree = new int[size * 2];
 			sum_tree = new long[size * 2];
-			
-			// gcd 구하는 트리
+
+			// 트리 선언
 			int id;
 			for (int i = 1; i <= N; i++) {
 				id = i + size - 1;
 				gcd_tree[id] = A[i];
 				sum_tree[id] = A[i];
 			}
-			
-			// 초기 전체 업데이트
+
+			// 초기 전체 업데이트 : 초기 업데이트는 괜찮음
 			for (int i = size - 1; i > 0; i--) {
 				gcd_tree[i] = GCD(gcd_tree[2 * i], gcd_tree[2 * i + 1]);
 				sum_tree[i] = sum_tree[2 * i] + sum_tree[2 * i + 1];
 			}
 
-//			System.out.println("check");
-
 			ans = 0;
-			if(N == 1) {
-				ans = 1;				
-			}else {
+			// 만약 층이 1개일 경우, 예외 케이스 생각할 것
+			if (N == 1) {
+				ans = 1;
+			} else {
 				int start, end, gcd;
 				for (int i = 1; i <= N; i++) {
 					start = i - G[i];
 					end = i + G[i];
-					
+
 					if (start < 1)
 						start = 1;
-					
+
 					if (end > N)
 						end = N;
-
+					
 					gcd = getGCD(start, end);
-					ans += getSum(start, end) / gcd;					
+					// 구간합으로 시간복잡도를 줄이려는 노력
+					ans += getSum(start, end) / gcd;
 				}
-				
+
 			}
-			
 
 			bw.write("#" + tc + " " + ans + "\n");
 		}
@@ -157,4 +156,3 @@ public class Solution_210715_알고리즘경진대회 {
 		}
 	}
 }
-
