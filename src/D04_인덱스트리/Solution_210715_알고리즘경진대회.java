@@ -12,7 +12,6 @@ import java.util.*;
 public class Solution_210715_알고리즘경진대회 {
 
 	static int TC, N, A[], G[], gcd_tree[], size;
-	static long sum_tree[];
 	static long ans;
 
 	public static void main(String[] args) throws IOException {
@@ -35,31 +34,31 @@ public class Solution_210715_알고리즘경진대회 {
 			for (int i = 1; i <= N; i++) {
 				a = Integer.parseInt(st1.nextToken());
 				b = Integer.parseInt(st2.nextToken());
-				A[i] = a;
-				G[i] = b;
+				A[i] = a;	// 층별 직원 수
+				G[i] = b;	// 팀 구성 가능한 층
 			}
-
+			
+			// 트리 사이징
 			size = 1;
 			while (size < N) {
 				size *= 2;
 			}
 
 			gcd_tree = new int[size * 2];
-			sum_tree = new long[size * 2];
-
+			
+			// gcd 구하는 트리
 			int id;
 			for (int i = 1; i <= N; i++) {
 				id = i + size - 1;
 				gcd_tree[id] = A[i];
-				sum_tree[id] = A[i];
 			}
-
+			
+			// 초기 전체 업데이트
 			for (int i = size - 1; i > 0; i--) {
 				gcd_tree[i] = GCD(gcd_tree[2 * i], gcd_tree[2 * i + 1]);
-				sum_tree[i] = sum_tree[2 * i] + sum_tree[2 * i + 1];
 			}
 
-			System.out.println("check");
+//			System.out.println("check");
 
 			ans = 0;
 			int start, end, gcd;
@@ -78,8 +77,6 @@ public class Solution_210715_알고리즘경진대회 {
 				// 인원수를 gcd로 나누어 각 층의 팀을 합산함
 				for (int j = start; j <= end; j++) {
 					ans += A[j] / gcd;
-					update_sum_tree(j, gcd);
-					update_gcd_tree(j, gcd);
 				}
 			}
 
@@ -89,30 +86,6 @@ public class Solution_210715_알고리즘경진대회 {
 		br.close();
 		bw.flush();
 		bw.close();
-
-	}
-
-	private static void update_gcd_tree(int id, int gcd) {
-		int idx = id + size - 1;
-		gcd_tree[idx] -= gcd;
-		idx /= 2;
-
-		while (idx > 0) {
-			gcd_tree[idx] = GCD(gcd_tree[idx * 2], gcd_tree[idx * 2 + 1]);
-			idx /= 2;
-		}
-
-	}
-
-	private static void update_sum_tree(int id, int gcd) {
-		int idx = id + size - 1;
-		sum_tree[idx] -= gcd;
-		idx /= 2;
-
-		while (idx > 0) {
-			sum_tree[idx] -= gcd;
-			idx /= 2;
-		}
 
 	}
 
